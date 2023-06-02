@@ -89,6 +89,13 @@ namespace Fprog.Algorithms.Common.Structures
             .Select(index => _matrix[index.row][index.column])
             .ToArray();
 
+        public T[][] Slice(int rowIndexFrom, int rowIndexTo, int columnIndexFrom, int columnIndexTo)
+        {
+            return this._matrix.Skip(rowIndexFrom).Take(rowIndexTo - rowIndexFrom + 1)
+                .Select(row => row.Skip(columnIndexFrom).Take(columnIndexTo - columnIndexFrom + 1).ToArray())
+                .ToArray();
+        }
+
         public override string ToString()
         {
             return String.Join("\n", this._matrix.Select(row => String.Join(", ", row)));
