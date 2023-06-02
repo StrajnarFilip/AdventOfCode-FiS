@@ -1,13 +1,11 @@
 ﻿using Fprog.Algorithms.Common.Structures;
+using Fprog.Algorithms.Common;
 
 Matrix<int> x = new(new int[][]{
     new int[]{ 1,2,3},
     new int[]{ 1,5,3}
 });
 
-foreach (var item in x.GetRow(1))
-{
-    Console.WriteLine(item);
-}
+Console.WriteLine(x.GetNeighbourIndices(0,1, true).FormattedString());
 
 Console.WriteLine($"{x.GetElement(0,1)}");

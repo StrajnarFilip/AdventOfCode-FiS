@@ -84,6 +84,11 @@ namespace Fprog.Algorithms.Common.Structures
             return validNeighbourIndices.ToArray();
         }
 
+        public T[] GetNeighbourValues(int rowIndex, int columnIndex, bool includeDiagonal = false)
+            => GetNeighbourIndices(rowIndex, columnIndex, includeDiagonal)
+            .Select(index => _matrix[index.row][index.column])
+            .ToArray();
+
         public override string ToString()
         {
             return String.Join("\n", this._matrix.Select(row => String.Join(", ", row)));
