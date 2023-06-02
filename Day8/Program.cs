@@ -9,6 +9,4 @@ Matrix<int> x = new(new int[,]{
     { 41,42,43,44,45,46,47,48,49},
 });
 
-Console.WriteLine(new Matrix<int>(x.Slice(1, 2, 3, 8)));
-
-Console.WriteLine($"{x}");
+int[] arr = { 1, 2, 3 };
