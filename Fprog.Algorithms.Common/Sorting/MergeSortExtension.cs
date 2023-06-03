@@ -32,7 +32,15 @@ namespace Fprog.Algorithms.Common.Sorting
             if (!lastSolved.Any())
                 return firstSolved;
 
-            // TODO
+
+            if(firstSolved.Count() < lastSolved.Count())
+            {
+
+            }
+            else
+            {
+
+            }
 
             throw new NotImplementedException();
         }
