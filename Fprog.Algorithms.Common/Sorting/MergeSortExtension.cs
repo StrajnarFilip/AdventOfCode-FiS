@@ -32,17 +32,53 @@ namespace Fprog.Algorithms.Common.Sorting
             if (!lastSolved.Any())
                 return firstSolved;
 
+            var firstStack = new Stack<T>(firstPart.Reverse());
+            var lastStack = new Stack<T>(lastPart.Reverse());
 
-            if(firstSolved.Count() < lastSolved.Count())
+            List<T> sorted = new();
+
+            if (firstSolved.Count() < lastSolved.Count())
             {
+                while(!lastStack.Any())
+                {
+                    if(!firstStack.Any())
+                    {
+                        sorted.Add(lastStack.Pop());
+                        continue;
+                    }
 
+                    if(lastStack.Peek().CompareTo(firstStack.Peek()) < 0)
+                    {
+                        sorted.Add(lastStack.Pop());
+                    }
+                    else
+                    {
+                        sorted.Add(firstStack.Pop());
+                    }
+                }
             }
             else
             {
+                while (!firstStack.Any())
+                {
+                    if (!lastStack.Any())
+                    {
+                        sorted.Add(firstStack.Pop());
+                        continue;
+                    }
 
+                    if (lastStack.Peek().CompareTo(firstStack.Peek()) < 0)
+                    {
+                        sorted.Add(lastStack.Pop());
+                    }
+                    else
+                    {
+                        sorted.Add(firstStack.Pop());
+                    }
+                }
             }
 
-            throw new NotImplementedException();
+            return sorted;
         }
     }
 }
