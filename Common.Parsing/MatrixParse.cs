@@ -2,7 +2,7 @@
 {
     using Fprog.Algorithms.Common.Structures;
 
-    public class MatrixParse
+    public static class MatrixParse
     {
         public static Matrix<int> ParseSingleDigitMatrix(string filePath)
         {

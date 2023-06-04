@@ -30,7 +30,7 @@ namespace Fprog.Algorithms.Common.Structures
             get => _matrix[rowIndex][columnIndex];
         }
 
-        public T[][] M { get => _matrix; }
+        public T[][] MatrixCopy() => _matrix.Select(row => row.Select(el => el).ToArray()).ToArray();
 
         public int RowCount => this._matrix.Length;
         public int ColumnsCount => this._matrix[0].Length;

@@ -10,31 +10,82 @@ public static class Program
     {
         var matrix = MatrixParse.ParseSingleDigitMatrix("Assets/data.txt");
 
-        var visibilityMatrix = new Matrix<bool>(Enumerable.Range(0, matrix.RowCount)
-            .Select(rowIndex => Enumerable.Range(0, matrix.ColumnsCount).Select<int, bool>(columnIndex =>
+        // Initialize a boolean matrix with all false values, except on edges.
+        var visibility = new bool[matrix.RowCount][];
+        for (int i = 0; i < visibility.Length; i++)
+        {
+            if (i == 0 || i == visibility.Length - 1)
             {
-                // Trees on edges are automatically visible
-                if (
-                    columnIndex == 0 ||
-                    columnIndex == matrix.ColumnsCount - 1 ||
-                    rowIndex == 0 ||
-                    rowIndex == matrix.RowCount - 1
-                    )
-                    return true;
+                // All true
+                visibility[i] = new bool[matrix.ColumnsCount].Select(el => true).ToArray();
+                continue;
+            }
 
-                int treeSize = matrix[rowIndex, columnIndex];
-                bool isVisibleFromTop = matrix.GetColumn(columnIndex).Take(columnIndex).All(tree => tree < treeSize);
-                bool isVisibleFromBottom = matrix.GetColumn(columnIndex).Skip(columnIndex + 1).All(tree => tree < treeSize);
-                bool isVisibleFromLeft = matrix.GetRow(columnIndex).Take(rowIndex).All(tree => tree < treeSize);
-                bool isVisibleFromRight = matrix.GetRow(columnIndex).Skip(rowIndex + 1).All(tree => tree < treeSize);
 
-                return isVisibleFromTop || isVisibleFromBottom || isVisibleFromLeft || isVisibleFromRight;
-            })));
+            var row = new bool[matrix.ColumnsCount].Select(el => false).ToArray();
+            row[0] = true;
+            row[visibility.Length - 1] = true;
+            visibility[i] = row;
+        }
 
-        Console.WriteLine(new Matrix<int>(visibilityMatrix.M.Select(row => row.Select(boolean => boolean ? 1 : 0))));
+        // Iterate from the top
+        for (int columnIndex = 1; columnIndex < matrix.ColumnsCount - 1; columnIndex++)
+        {
+            int localMax = matrix[0, columnIndex];
+            for (int rowIndex = 1; rowIndex < matrix.RowCount - 1; rowIndex++)
+            {
+                if (matrix[rowIndex, columnIndex] > localMax)
+                {
+                    visibility[rowIndex][columnIndex] = true;
+                    localMax = matrix[rowIndex, columnIndex];
+                }
+            }
+        }
 
-        var visibility = visibilityMatrix.AllValues().Select(boolean => boolean ? 1 : 0);
+        // Iterate from the bottom
+        for (int columnIndex = 1; columnIndex < matrix.ColumnsCount - 1; columnIndex++)
+        {
+            int localMax = matrix[matrix.RowCount - 1, columnIndex];
+            for (int rowIndex = matrix.RowCount - 2; rowIndex > 0; rowIndex--)
+            {
+                if (matrix[rowIndex, columnIndex] > localMax)
+                {
+                    visibility[rowIndex][columnIndex] = true;
+                    localMax = matrix[rowIndex, columnIndex];
+                }
+            }
+        }
 
-        Console.WriteLine(visibility.Sum());
+        // Iterate from the left
+        for (int rowIndex = 1; rowIndex < matrix.RowCount - 1; rowIndex++)
+        {
+            int localMax = matrix[rowIndex, 0];
+            for (int columnIndex = 1; columnIndex < matrix.ColumnsCount - 1; columnIndex++)
+            {
+                if (matrix[rowIndex, columnIndex] > localMax)
+                {
+                    visibility[rowIndex][columnIndex] = true;
+                    localMax = matrix[rowIndex, columnIndex];
+                }
+            }
+        }
+
+        // Iterate from the right
+        for (int rowIndex = 1; rowIndex < matrix.RowCount - 1; rowIndex++)
+        {
+            int localMax = matrix[rowIndex, matrix.ColumnsCount - 1];
+            for (int columnIndex = matrix.ColumnsCount - 2; columnIndex > 0; columnIndex--)
+            {
+                if (matrix[rowIndex, columnIndex] > localMax)
+                {
+                    visibility[rowIndex][columnIndex] = true;
+                    localMax = matrix[rowIndex, columnIndex];
+                }
+            }
+        }
+
+        // At this point the visibility matrix is done.
+        // The following line converts booleans to 1s and 0s, and sums them up.
+        Console.WriteLine(new Matrix<int>(visibility.Select(r => r.Select(c => c ? 1 : 0))).AllValues().Sum());
     }
 }
