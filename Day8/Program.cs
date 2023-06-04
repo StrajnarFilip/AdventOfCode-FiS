@@ -6,10 +6,8 @@ using Fprog.Algorithms.Common.Structures;
 
 public static class Program
 {
-    public static void Main()
+    public static Matrix<bool> VisibilityFromOutsideMatrix(Matrix<int> matrix)
     {
-        var matrix = MatrixParse.ParseSingleDigitMatrix("Assets/data.txt");
-
         // Initialize a boolean matrix with all false values, except on edges.
         var visibility = new bool[matrix.RowCount][];
         for (int i = 0; i < visibility.Length; i++)
@@ -84,8 +82,90 @@ public static class Program
             }
         }
 
-        // At this point the visibility matrix is done.
-        // The following line converts booleans to 1s and 0s, and sums them up.
-        Console.WriteLine(new Matrix<int>(visibility.Select(r => r.Select(c => c ? 1 : 0))).AllValues().Sum());
+        return new Matrix<bool>(visibility);
+    }
+
+    public static int VisibleTreesTop(Matrix<int> matrix, int rowIndex, int columnIndex)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static int VisibleTreesBottom(Matrix<int> matrix, int rowIndex, int columnIndex)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static int VisibleTreesLeft(Matrix<int> matrix, int rowIndex, int columnIndex)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static int VisibleTreesRight(Matrix<int> matrix, int rowIndex, int columnIndex)
+    {
+        throw new NotImplementedException();
+    }
+
+
+    /// <summary>
+    /// Calculates scenic score of a single element (tree) in the matrix.
+    /// </summary>
+    /// <param name="matrix"></param>
+    /// <param name="rowIndex"></param>
+    /// <param name="columnIndex"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public static int ScenicScoreElement(Matrix<int> matrix, int rowIndex, int columnIndex)
+    {
+        var visibleFromTop = VisibleTreesTop(matrix, rowIndex, columnIndex);
+        var visibleFromBottom = VisibleTreesBottom(matrix, rowIndex, columnIndex);
+        var visibleFromLeft = VisibleTreesLeft(matrix, rowIndex, columnIndex);
+        var visibleFromRight = VisibleTreesRight(matrix, rowIndex, columnIndex);
+
+        return visibleFromTop * visibleFromBottom * visibleFromLeft * visibleFromRight;
+    }
+
+    public static Matrix<int> ScenicScoreMatrix(Matrix<int> matrix)
+    {
+        var scenicScores = new int[matrix.RowCount][];
+        for (int rowIndex = 0; rowIndex < matrix.ColumnsCount; rowIndex++)
+        {
+            var scenicScoreRow = new int[matrix.ColumnsCount];
+            for (int columnIndex = 0; columnIndex < matrix.RowCount; columnIndex++)
+            {
+                scenicScoreRow[columnIndex] = ScenicScoreElement(matrix, rowIndex, columnIndex);
+            }
+            scenicScores[rowIndex] = scenicScoreRow;
+        }
+
+        return new Matrix<int>(scenicScores);
+    }
+
+    /// <summary>
+    /// Calculates the amount of trees, visible from outside the grid.
+    /// </summary>
+    /// <param name="matrix"></param>
+    /// <returns></returns>
+    public static int Part1(Matrix<int> matrix)
+    {
+        // Count true elements.
+        return VisibilityFromOutsideMatrix(matrix).AllValues().Count(element => element);
+    }
+
+    /// <summary>
+    /// Calculates the highest available scenic score.
+    /// </summary>
+    /// <returns></returns>
+    public static int Part2(Matrix<int> matrix)
+    {
+        return ScenicScoreMatrix(matrix).AllValues().Max();
+    }
+
+
+    public static void Main()
+    {
+        var matrix = MatrixParse.ParseSingleDigitMatrix("Assets/data.txt");
+
+
+        Console.WriteLine($"Part 1: {Part1(matrix)}, Part 2: ");
     }
 }
