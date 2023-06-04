@@ -87,22 +87,62 @@ public static class Program
 
     public static int VisibleTreesTop(Matrix<int> matrix, int rowIndex, int columnIndex)
     {
-        throw new NotImplementedException();
+        int treeHeight = matrix[rowIndex, columnIndex];
+        int visibleTrees = 0;
+
+        for (int row = rowIndex; row > 0; row--)
+        {
+            visibleTrees++;
+            if (matrix[row - 1, columnIndex] >= treeHeight)
+                break;
+        }
+
+        return visibleTrees;
     }
 
     public static int VisibleTreesBottom(Matrix<int> matrix, int rowIndex, int columnIndex)
     {
-        throw new NotImplementedException();
+        int treeHeight = matrix[rowIndex, columnIndex];
+        int visibleTrees = 0;
+
+        for (int row = rowIndex; row < matrix.RowCount - 1; row++)
+        {
+            visibleTrees++;
+            if (matrix[row + 1, columnIndex] >= treeHeight)
+                break;
+        }
+
+        return visibleTrees;
     }
 
     public static int VisibleTreesLeft(Matrix<int> matrix, int rowIndex, int columnIndex)
     {
-        throw new NotImplementedException();
+        int treeHeight = matrix[rowIndex, columnIndex];
+        int visibleTrees = 0;
+
+        for (int column = columnIndex; column > 0; column--)
+        {
+            visibleTrees++;
+            if (matrix[rowIndex, column - 1] >= treeHeight)
+                break;
+        }
+
+        return visibleTrees;
     }
 
     public static int VisibleTreesRight(Matrix<int> matrix, int rowIndex, int columnIndex)
     {
-        throw new NotImplementedException();
+        int treeHeight = matrix[rowIndex, columnIndex];
+        int visibleTrees = 0;
+
+        for (int column = columnIndex; column < matrix.ColumnsCount - 1; column++)
+        {
+            visibleTrees++;
+            if (matrix[rowIndex, column + 1] >= treeHeight)
+                break;
+        }
+
+        return visibleTrees;
     }
 
 
@@ -166,6 +206,6 @@ public static class Program
         var matrix = MatrixParse.ParseSingleDigitMatrix("Assets/data.txt");
 
 
-        Console.WriteLine($"Part 1: {Part1(matrix)}, Part 2: ");
+        Console.WriteLine($"Part 1: {Part1(matrix)}, Part 2: {Part2(matrix)}");
     }
 }
