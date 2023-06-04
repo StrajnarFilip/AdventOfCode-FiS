@@ -15,7 +15,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fprog.Algorithms.Common", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fprog.Algorithms.CommonTest", "Fprog.Algorithms.CommonTest\Fprog.Algorithms.CommonTest.csproj", "{6790E86C-5F16-42DE-BDF4-43D7BCD34C72}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Parsing", "Common.Parsing\Common.Parsing.csproj", "{C515B05B-D557-4427-955F-A1C3832BBEB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Parsing", "Common.Parsing\Common.Parsing.csproj", "{C515B05B-D557-4427-955F-A1C3832BBEB7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4D862D00-01CD-48AF-8B7B-08220A3B894C}"
+	ProjectSection(SolutionItems) = preProject
+		Graded.yaml = Graded.yaml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,5 +59,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4F56F3C3-F5A4-4BDE-8EF5-FF700FE88E48}
 	EndGlobalSection
 EndGlobal

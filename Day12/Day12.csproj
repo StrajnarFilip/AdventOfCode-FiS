@@ -7,4 +7,15 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Common.Parsing\Common.Parsing.csproj" />
+    <ProjectReference Include="..\Fprog.Algorithms.Common\Fprog.Algorithms.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Assets\data.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
