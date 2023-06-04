@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -8,55 +9,63 @@ using System.Threading.Tasks;
 
 namespace Fprog.Algorithms.Common.Structures
 {
-    public class Graph<V> where V : IEquatable<V>
+    public class Graph<T> where T : IEquatable<T>
     {
-        public HashSet<V> Vertices { get; } = new();
-        public List<Edge<V>> Edges { get; } = new();
-        public Dictionary<V, HashSet<V>> OutNeighbours { get; } = new();
+        public HashSet<T> Vertices { get; } = new();
+        List<Edge<T>> Edges { get; } = new();
+        public Dictionary<T, HashSet<T>> OutNeighbours { get; } = new();
 
         public Graph()
         {
         }
 
-        public Graph(IEnumerable<V> vertices)
+        public Graph(IEnumerable<T> vertices)
         {
-            this.Vertices = vertices.ToHashSet();
+            if (vertices is null)
+                throw new ArgumentNullException(nameof(vertices), "Vertices are null.");
+
             foreach (var vertex in vertices)
             {
-                OutNeighbours[vertex] = new();
+                AddVertex(vertex);
             }
         }
 
-        public void AddVertex(V vertex)
+        public Graph(IEnumerable<T> vertices, IEnumerable<Edge<T>> edges) : this(vertices)
+        {
+            AddEdges(edges);
+        }
+
+        public Edge<T>[] AllEdges() => Edges.ToArray();
+
+        public void AddVertex(T vertex)
         {
             this.Vertices.Add(vertex);
             OutNeighbours[vertex] = new();
         }
 
-        public Graph(IEnumerable<V> vertices, IEnumerable<Edge<V>> edges) : this(vertices)
+        public void AddEdges(IEnumerable<Edge<T>> edges)
         {
-            AddEdges(edges);
-        }
-
-        public void AddEdges(IEnumerable<Edge<V>> edges)
-        {
+            if (edges is null)
+                throw new ArgumentNullException(nameof(edges), "Edges are null.");
             foreach (var edge in edges)
             {
                 AddEdge(edge);
             }
         }
 
-        public void AddUndirectedEdge(Edge<V> edge)
+        public void AddUndirectedEdge(Edge<T> edge)
         {
+            if (edge is null)
+                throw new ArgumentNullException(nameof(edge), "Edge is null.");
             AddEdge(edge);
-            AddEdge(new Edge<V>(edge.To, edge.From, edge.Weight));
+            AddEdge(new Edge<T>(edge.To, edge.From, edge.Weight));
         }
 
         /// <summary>
         /// Adds directed edge.
         /// </summary>
         /// <param name="edge"></param>
-        public void AddEdge(Edge<V> edge)
+        public void AddEdge(Edge<T> edge)
         {
             if (edge is null || edge.From is null || edge.To is null)
                 return;

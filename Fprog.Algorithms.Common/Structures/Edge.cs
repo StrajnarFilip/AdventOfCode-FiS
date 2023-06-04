@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Fprog.Algorithms.Common.Structures
 {
-    public class Edge<V> where V : IEquatable<V>
+    public class Edge<T> where T : IEquatable<T>
     {
-        public V From { get; }
-        public V To { get; }
+        public T From { get; }
+        public T To { get; }
         public decimal Weight { get; }
 
-        public Edge(V from, V to, decimal weight)
+        public Edge(T from, T to, decimal weight)
         {
             this.From = from;
             this.To = to;

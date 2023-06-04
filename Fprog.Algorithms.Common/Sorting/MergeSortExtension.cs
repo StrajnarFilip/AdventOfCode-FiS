@@ -39,15 +39,15 @@ namespace Fprog.Algorithms.Common.Sorting
 
             if (firstSolved.Count() < lastSolved.Count())
             {
-                while(!lastStack.Any())
+                while (!lastStack.Any())
                 {
-                    if(!firstStack.Any())
+                    if (!firstStack.Any())
                     {
                         sorted.Add(lastStack.Pop());
                         continue;
                     }
 
-                    if(lastStack.Peek().CompareTo(firstStack.Peek()) < 0)
+                    if (lastStack.Peek().CompareTo(firstStack.Peek()) < 0)
                     {
                         sorted.Add(lastStack.Pop());
                     }
