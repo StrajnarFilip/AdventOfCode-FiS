@@ -11,9 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Day12", "Day12\Day12.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Day19", "Day19\Day19.csproj", "{D21DFF4B-3794-427E-8899-2CE819D37AE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fprog.Algorithms.Common", "Fprog.Algorithms.Common\Fprog.Algorithms.Common.csproj", "{E3039B6B-3D07-4127-A811-8267AFC31941}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fprog.Algorithms.Common", "Fprog.Algorithms.Common\Fprog.Algorithms.Common.csproj", "{E3039B6B-3D07-4127-A811-8267AFC31941}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fprog.Algorithms.CommonTest", "Fprog.Algorithms.CommonTest\Fprog.Algorithms.CommonTest.csproj", "{6790E86C-5F16-42DE-BDF4-43D7BCD34C72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fprog.Algorithms.CommonTest", "Fprog.Algorithms.CommonTest\Fprog.Algorithms.CommonTest.csproj", "{6790E86C-5F16-42DE-BDF4-43D7BCD34C72}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Parsing", "Common.Parsing\Common.Parsing.csproj", "{C515B05B-D557-4427-955F-A1C3832BBEB7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{6790E86C-5F16-42DE-BDF4-43D7BCD34C72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6790E86C-5F16-42DE-BDF4-43D7BCD34C72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6790E86C-5F16-42DE-BDF4-43D7BCD34C72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C515B05B-D557-4427-955F-A1C3832BBEB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C515B05B-D557-4427-955F-A1C3832BBEB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C515B05B-D557-4427-955F-A1C3832BBEB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C515B05B-D557-4427-955F-A1C3832BBEB7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

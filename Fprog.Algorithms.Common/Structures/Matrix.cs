@@ -25,6 +25,13 @@ namespace Fprog.Algorithms.Common.Structures
             this._matrix = values.Select(row => row.ToArray()).ToArray();
         }
 
+        public T this[int rowIndex, int columnIndex]
+        {
+            get => _matrix[rowIndex][columnIndex];
+        }
+
+        public T[][] M { get => _matrix; }
+
         public int RowCount => this._matrix.Length;
         public int ColumnsCount => this._matrix[0].Length;
 
