@@ -8,32 +8,37 @@ using System.Threading.Tasks;
 
 namespace Fprog.Algorithms.Common.Structures
 {
-    public class Graph<T> where T : IEquatable<T>
+    public class Graph<V> where V : IEquatable<V>
     {
-        public HashSet<Vertex<T>> Vertices { get; } = new();
-        public List<Edge<T>> Edges { get; } = new();
-        public Dictionary<Vertex<T>, HashSet<Vertex<T>>> Neighbours { get; } = new();
+        public HashSet<V> Vertices { get; } = new();
+        public List<Edge<V>> Edges { get; } = new();
+        public Dictionary<V, HashSet<V>> OutNeighbours { get; } = new();
 
         public Graph()
         {
         }
 
-        public Graph(IEnumerable<T> values)
-        {
-            this.Vertices = values.Select(value => new Vertex<T>(value)).ToHashSet();
-        }
-
-        public Graph(IEnumerable<Vertex<T>> vertices)
+        public Graph(IEnumerable<V> vertices)
         {
             this.Vertices = vertices.ToHashSet();
+            foreach (var vertex in vertices)
+            {
+                OutNeighbours[vertex] = new();
+            }
         }
 
-        public Graph(IEnumerable<T> values, IEnumerable<Edge<T>> edges) : this(values)
+        public void AddVertex(V vertex)
         {
-            
+            this.Vertices.Add(vertex);
+            OutNeighbours[vertex] = new();
         }
 
-        public void AddEdges(IEnumerable<Edge<T>> edges)
+        public Graph(IEnumerable<V> vertices, IEnumerable<Edge<V>> edges) : this(vertices)
+        {
+            AddEdges(edges);
+        }
+
+        public void AddEdges(IEnumerable<Edge<V>> edges)
         {
             foreach (var edge in edges)
             {
@@ -41,20 +46,31 @@ namespace Fprog.Algorithms.Common.Structures
             }
         }
 
-        public void AddEdge(Edge<T> edge)
+        public void AddUndirectedEdge(Edge<V> edge)
         {
-            if (edge is null)
+            AddEdge(edge);
+            AddEdge(new Edge<V>(edge.To, edge.From, edge.Weight));
+        }
+
+        /// <summary>
+        /// Adds directed edge.
+        /// </summary>
+        /// <param name="edge"></param>
+        public void AddEdge(Edge<V> edge)
+        {
+            if (edge is null || edge.From is null || edge.To is null)
                 return;
+
+            this.Vertices.Add(edge.From);
+            this.Vertices.Add(edge.To);
+
             this.Edges.Add(edge);
 
-            // Checking if HashSets have not been initialized yet.
-            if (!this.Neighbours.ContainsKey(edge.From))
-                this.Neighbours[edge.From] = new();
-            if (!this.Neighbours.ContainsKey(edge.To))
-                this.Neighbours[edge.To] = new();
+            // Checking if HashSet has not been initialized yet.
+            if (!this.OutNeighbours.ContainsKey(edge.From))
+                this.OutNeighbours[edge.From] = new();
 
-            this.Neighbours[edge.From].Add(edge.To);
-            this.Neighbours[edge.To].Add(edge.From);
+            this.OutNeighbours[edge.From].Add(edge.To);
         }
     }
 }

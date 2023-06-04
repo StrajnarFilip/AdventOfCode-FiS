@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Fprog.Algorithms.Common.Structures
 {
-    public class Edge<T> where T : IEquatable<T>
+    public class Edge<V> where V : IEquatable<V>
     {
-        public Vertex<T> From { get; }
-        public Vertex<T> To { get; }
+        public V From { get; }
+        public V To { get; }
         public decimal Weight { get; }
 
-        public Edge(Vertex<T> from, Vertex<T> to, decimal weight)
+        public Edge(V from, V to, decimal weight)
         {
             this.From = from;
             this.To = to;
@@ -21,7 +21,7 @@ namespace Fprog.Algorithms.Common.Structures
 
         public override string ToString()
         {
-            return $"[ {this.From.Value} , {this.To.Value} ]";
+            return $"[ {this.From} , {this.To} ]";
         }
     }
 }
