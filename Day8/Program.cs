@@ -1,6 +1,4 @@
 ﻿namespace Day8;
-using Fprog.Algorithms.Common;
-using Fprog.Algorithms.Common.Sorting;
 using Common.Parsing;
 using Fprog.Algorithms.Common.Structures;
 
@@ -204,7 +202,6 @@ public static class Program
     public static void Main()
     {
         var matrix = MatrixParse.ParseSingleDigitMatrix("Assets/data.txt");
-
 
         Console.WriteLine($"Part 1: {Part1(matrix)}, Part 2: {Part2(matrix)}");
     }
