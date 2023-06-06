@@ -134,7 +134,7 @@ namespace Fprog.Algorithms.Common.Structures
             {
                 var oldPath = nodes[neighbour.To].BestKnownPath;
                 var newPath = currentPath.Append(neighbour).ToList();
-                var newPathDistance = currentPath.Append(neighbour).Sum(edge => edge.Weight);
+                var newPathDistance = newPath.Sum(edge => edge.Weight);
 
                 if (oldPath is null)
                 {
