@@ -132,6 +132,7 @@ namespace Fprog.Algorithms.Common.Structures
             nextToVisit.Add(neighbour.To);
             var currentBestPath = node.BestKnownPath;
             var neighbourBestPath = nodes[neighbour.To].BestKnownPath;
+
             CalculateBestKnownPath(nodes[neighbour.To], neighbourBestPath, currentBestPath, neighbour);
         }
 
@@ -146,10 +147,9 @@ namespace Fprog.Algorithms.Common.Structures
             var oldDistance = neighbourBestPath.Sum(edge => edge.Weight);
             var currentBestDistance = currentBestPath.Sum(edge => edge.Weight);
             var newBestDistance = currentBestDistance + neighbour.Weight;
+
             if (oldDistance > newBestDistance)
-            {
                 neighbourNode.ChangeBestPath(currentBestPath.Append(neighbour).ToList());
-            }
         }
     }
 }

@@ -6,12 +6,30 @@ using Fprog.Algorithms.Common.Structures;
 
 public static class Program
 {
-    public static int RowAndColumnIndexToId<T>(Matrix<T> matrix, int rowIndex, int columnIndex)
+    private static int RowAndColumnIndexToId<T>(Matrix<T> matrix, int rowIndex, int columnIndex)
     {
         return matrix.ColumnsCount * rowIndex + columnIndex;
     }
 
-    public static void DoWork()
+    private static int Part1(Graph<Hill> graph, List<Hill> hills, int endId)
+    {
+        var distances = graph.DijkstrasAlgorithm(hills.First(hill => hill.Height == 'S'));
+        return distances[hills.First(hill => hill.Id == endId)].BestKnownPath.Count;
+    }
+
+    private static int Part2(Graph<Hill> graph, List<Hill> hills, int endId)
+    {
+        var minimalDistance = hills
+            .Where(hill => hill.Height == 'S' || hill.Height == 'a')
+            .Select(graph.DijkstrasAlgorithm)
+            .Where(distances => distances[hills.First(hill => hill.Id == endId)].BestKnownPath != null)
+            .Select(distances => distances[hills.First(hill => hill.Id == endId)].BestKnownPath.Count)
+            .Min();
+
+        return minimalDistance;
+    }
+
+    private static void DoWork()
     {
         Matrix<char> matrixChars = MatrixParse.ParseSingleCharacterMatrix("Assets/data.txt");
         char[] chars = matrixChars.AllValues().Select(ch => ch == 'E' ? 'z' : ch).ToArray();
@@ -42,11 +60,11 @@ public static class Program
             }
         }
         int endId = RowAndColumnIndexToId(matrix, 20, 148);
-        var distances = graph.DijkstrasAlgorithm(hills.First(hill => hill.Height == 'S'));
-        Console.WriteLine($"Shortest distance is: {distances[hills.First(hill => hill.Id == endId)].BestKnownPath.Count}");
+
+        Console.WriteLine($"Part 1: {Part1(graph, hills, endId)}, Part 2: {Part2(graph, hills, endId)}");
     }
     public static void Main()
     {
-        new Thread(DoWork, 2_000_000).Start();
+        new Thread(DoWork, 4_000_000).Start();
     }
 }
