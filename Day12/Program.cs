@@ -6,10 +6,15 @@ using Fprog.Algorithms.Common.Structures;
 
 public static class Program
 {
+    public static int RowAndColumnIndexToId<T>(Matrix<T> matrix, int rowIndex, int columnIndex)
+    {
+        return matrix.ColumnsCount * rowIndex + columnIndex;
+    }
+
     public static void DoWork()
     {
-        Matrix<char> matrixChars = MatrixParse.ParseSingleCharacterMatrix("Assets/data.txt");
-        char[] chars = matrixChars.AllValues();
+        Matrix<char> matrixChars = MatrixParse.ParseSingleCharacterMatrix("Assets/small.txt");
+        char[] chars = matrixChars.AllValues().Select(ch => ch == 'E' ? 'z' : ch).ToArray();
 
         List<Hill> hills = new();
         for (int i = 0; i < chars.Length; i++)
@@ -36,9 +41,9 @@ public static class Program
                 }
             }
         }
-
+        int endId = RowAndColumnIndexToId(matrix, 2, 5);
         var distances = graph.DijkstrasAlgorithm(hills.First(hill => hill.Height == 'S'));
-        Console.WriteLine($"Shortest distance is: {distances[hills.First(hill => hill.Height == 'E')].BestKnownPath.Count}");
+        Console.WriteLine($"Shortest distance is: {distances[hills.First(hill => hill.Id == endId)].BestKnownPath.Count}");
     }
     public static void Main()
     {
