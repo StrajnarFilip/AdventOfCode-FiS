@@ -98,54 +98,58 @@ namespace Fprog.Algorithms.Common.Structures
 
         private void DijkstrasAlgorithmRecursive(
             Dictionary<T, DijkstraNode<T>> nodes,
-            List<T> toVisit
+            List<T> verticesToVisit
             )
         {
             var nextToVisit = new List<T>();
-            foreach (var visit in toVisit)
-            {
-                var node = nodes[visit];
-                if (node.Visited)
-                    continue;
+            foreach (var vertex in verticesToVisit)
+                VisitVertex(nodes, nextToVisit, vertex);
 
-
-                var allNeighbours = this.OutNeighbours[visit]
-                    .OrderBy(neighbour => neighbour.Weight)
-                    .ToArray();
-
-
-                foreach (var neighbour in allNeighbours)
-                {
-                    AddVisitNeighbours(nodes, node, neighbour, nextToVisit);
-                }
-
-                node.Visited = true;
-            }
-
-            if (nextToVisit.Count > 0)
+            if (nextToVisit.Any())
                 DijkstrasAlgorithmRecursive(nodes, nextToVisit);
         }
 
-        private void AddVisitNeighbours(Dictionary<T, DijkstraNode<T>> nodes, DijkstraNode<T> node, Edge<T> neighbour, List<T> nextToVisit)
+        private void VisitVertex(Dictionary<T, DijkstraNode<T>> nodes, List<T> nextToVisit, T vertex)
         {
-            var currentPath = node.BestKnownPath;
-            var currentDistance = currentPath.Sum(edge => edge.Weight);
-            var newDistance = currentDistance + neighbour.Weight;
+            var node = nodes[vertex];
+            if (node.Visited)
+                return;
+
+            var allNeighbours = this.OutNeighbours[vertex]
+                .OrderBy(neighbour => neighbour.Weight)
+                .ToArray();
+
+            foreach (var neighbour in allNeighbours)
+                AddVisitNeighbours(nodes, nextToVisit, node, neighbour);
+
+            node.Visited = true;
+        }
+
+        private static void AddVisitNeighbours(Dictionary<T, DijkstraNode<T>> nodes, List<T> nextToVisit, DijkstraNode<T> node, Edge<T> neighbour)
+        {
+            if (node.BestKnownPath is null)
+                return;
+            nextToVisit.Add(neighbour.To);
+            var currentBestPath = node.BestKnownPath;
             var neighbourBestPath = nodes[neighbour.To].BestKnownPath;
-            if (neighbourBestPath is not null)
+            CalculateBestKnownPath(nodes[neighbour.To], neighbourBestPath, currentBestPath, neighbour);
+        }
+
+        private static void CalculateBestKnownPath(DijkstraNode<T> neighbourNode, List<Edge<T>> neighbourBestPath, List<Edge<T>> currentBestPath, Edge<T> neighbour)
+        {
+            if (neighbourBestPath is null)
             {
-                var oldDistance = neighbourBestPath.Sum(edge => edge.Weight);
-                if (oldDistance > newDistance)
-                {
-                    nodes[neighbour.To].BestKnownPath = currentPath.Append(neighbour).ToList();
-                }
-            }
-            else
-            {
-                nodes[neighbour.To].BestKnownPath = currentPath.Append(neighbour).ToList();
+                neighbourNode.BestKnownPath = currentBestPath.Append(neighbour).ToList();
+                return;
             }
 
-            nextToVisit.Add(neighbour.To);
+            var oldDistance = neighbourBestPath.Sum(edge => edge.Weight);
+            var currentBestDistance = currentBestPath.Sum(edge => edge.Weight);
+            var newBestDistance = currentBestDistance + neighbour.Weight;
+            if (oldDistance > newBestDistance)
+            {
+                neighbourNode.BestKnownPath = currentBestPath.Append(neighbour).ToList();
+            }
         }
     }
 }

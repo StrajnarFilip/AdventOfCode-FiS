@@ -21,7 +21,7 @@ namespace Fprog.Algorithms.Common.Structures
 
         public override string ToString()
         {
-            return $"Vertex: {this.Vertex}, best path so far: {BestKnownPath.FormattedString()}. Visited: {Visited}";
+            return $"Vertex: {this.Vertex}, best path so far: {BestKnownPath?.FormattedString()}. Visited: {Visited}";
         }
     }
 }
