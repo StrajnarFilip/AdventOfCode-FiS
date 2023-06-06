@@ -132,11 +132,27 @@ namespace Fprog.Algorithms.Common.Structures
 
             foreach (var neighbour in allNeighbours)
             {
-                DijkstrasAlgorithmRecursive(
+                var oldPath = nodes[neighbour.To].BestKnownPath;
+                var newPath = currentPath.Append(neighbour).ToList();
+                var newPathDistance = currentPath.Append(neighbour).Sum(edge => edge.Weight);
+
+                if (oldPath is null)
+                {
+                    DijkstrasAlgorithmRecursive(
                     nodes,
-                    currentPath.Append(neighbour).ToList(),
+                    newPath,
                     nodes[neighbour.To]
                     );
+                }
+                else
+                {
+                    var oldPathDistance = oldPath.Sum(edge => edge.Weight);
+                    DijkstrasAlgorithmRecursive(
+                    nodes,
+                    newPathDistance < oldPathDistance ? newPath : oldPath,
+                    nodes[neighbour.To]
+                    );
+                }
             }
 
             return nodes;

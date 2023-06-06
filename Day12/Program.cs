@@ -1,19 +1,20 @@
 ﻿namespace Day12;
 
+using System.ComponentModel;
 using Common.Parsing;
 using Fprog.Algorithms.Common.Structures;
 
 public static class Program
 {
-    public static void Main()
+    public static void DoWork()
     {
-        Matrix<char> matrixChars = MatrixParse.ParseSingleCharacterMatrix("Assets/small.txt");
+        Matrix<char> matrixChars = MatrixParse.ParseSingleCharacterMatrix("Assets/data.txt");
         char[] chars = matrixChars.AllValues();
 
-        List<Hill> hills = new(); 
+        List<Hill> hills = new();
         for (int i = 0; i < chars.Length; i++)
         {
-            hills.Add(new Hill(chars[i],i));
+            hills.Add(new Hill(chars[i], i));
         }
 
         Matrix<Hill> matrix = new(hills.Chunk(matrixChars.ColumnsCount));
@@ -38,5 +39,9 @@ public static class Program
 
         var distances = graph.DijkstrasAlgorithm(hills.First(hill => hill.Height == 'S'));
         Console.WriteLine($"Shortest distance is: {distances[hills.First(hill => hill.Height == 'E')].BestKnownPath.Count}");
+    }
+    public static void Main()
+    {
+        new Thread(DoWork, 400_000_000).Start();
     }
 }
