@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Numerics;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,7 +14,7 @@ namespace Fprog.Algorithms.Common.Structures
     {
         public HashSet<T> Vertices { get; } = new();
         List<Edge<T>> Edges { get; } = new();
-        public Dictionary<T, HashSet<T>> OutNeighbours { get; } = new();
+        public Dictionary<T, HashSet<Edge<T>>> OutNeighbours { get; } = new();
 
         public Graph()
         {
@@ -79,7 +80,67 @@ namespace Fprog.Algorithms.Common.Structures
             if (!this.OutNeighbours.ContainsKey(edge.From))
                 this.OutNeighbours[edge.From] = new();
 
-            this.OutNeighbours[edge.From].Add(edge.To);
+            this.OutNeighbours[edge.From].Add(edge);
+        }
+
+        public Dictionary<T, DijkstraNode<T>> DijkstrasAlgorithm(T initial)
+        {
+            // Marks all nodes as unvisited, and tentative distances as infinity.
+            Dictionary<T, DijkstraNode<T>> nodes = Vertices
+                .Select(vertex => new DijkstraNode<T>(vertex))
+                .ToDictionary(node => node.Vertex);
+            // Set of unvisited
+            HashSet<T> unvisited = Vertices.ToHashSet();
+
+            return DijkstrasAlgorithmRecursive(nodes, new List<Edge<T>>(), nodes[initial]);
+        }
+
+        private Dictionary<T, DijkstraNode<T>> DijkstrasAlgorithmRecursive(
+            Dictionary<T, DijkstraNode<T>> nodes,
+            List<Edge<T>> currentPath,
+            DijkstraNode<T> currentNode
+            )
+        {
+            if (currentNode.Visited)
+            {
+                return nodes;
+            }
+
+            var allNeighbours = this.OutNeighbours[currentNode.Vertex]
+                .OrderBy(neighbour => neighbour.Weight)
+                .ToArray();
+            var currentDistance = currentPath.Sum(edge => edge.Weight);
+
+            foreach (var neighbour in allNeighbours)
+            {
+                var newDistance = currentDistance + neighbour.Weight;
+                var neighbourBestPath = nodes[neighbour.To].BestKnownPath;
+                if (neighbourBestPath is not null)
+                {
+                    var oldDistance = neighbourBestPath.Sum(edge => edge.Weight);
+                    if (oldDistance > newDistance)
+                    {
+                        nodes[neighbour.To].BestKnownPath = currentPath.Append(neighbour).ToList();
+                    }
+                }
+                else
+                {
+                    nodes[neighbour.To].BestKnownPath = currentPath.Append(neighbour).ToList();
+                }
+            }
+
+            currentNode.Visited = true;
+
+            foreach (var neighbour in allNeighbours)
+            {
+                DijkstrasAlgorithmRecursive(
+                    nodes,
+                    currentPath.Append(neighbour).ToList(),
+                    nodes[neighbour.To]
+                    );
+            }
+
+            return nodes;
         }
     }
 }
