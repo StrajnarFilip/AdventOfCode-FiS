@@ -90,7 +90,7 @@ namespace Fprog.Algorithms.Common.Structures
             Dictionary<T, DijkstraNode<T>> nodes = Vertices
                 .Select(vertex => new DijkstraNode<T>(vertex))
                 .ToDictionary(node => node.Vertex);
-            nodes[initial].BestKnownPath = new();
+            nodes[initial].ChangeBestPath(new());
 
             DijkstrasAlgorithmRecursive(nodes, new List<T> { initial });
             return nodes;
@@ -135,11 +135,11 @@ namespace Fprog.Algorithms.Common.Structures
             CalculateBestKnownPath(nodes[neighbour.To], neighbourBestPath, currentBestPath, neighbour);
         }
 
-        private static void CalculateBestKnownPath(DijkstraNode<T> neighbourNode, List<Edge<T>> neighbourBestPath, List<Edge<T>> currentBestPath, Edge<T> neighbour)
+        private static void CalculateBestKnownPath(DijkstraNode<T> neighbourNode, List<Edge<T>>? neighbourBestPath, List<Edge<T>> currentBestPath, Edge<T> neighbour)
         {
             if (neighbourBestPath is null)
             {
-                neighbourNode.BestKnownPath = currentBestPath.Append(neighbour).ToList();
+                neighbourNode.ChangeBestPath(currentBestPath.Append(neighbour).ToList());
                 return;
             }
 
@@ -148,7 +148,7 @@ namespace Fprog.Algorithms.Common.Structures
             var newBestDistance = currentBestDistance + neighbour.Weight;
             if (oldDistance > newBestDistance)
             {
-                neighbourNode.BestKnownPath = currentBestPath.Append(neighbour).ToList();
+                neighbourNode.ChangeBestPath(currentBestPath.Append(neighbour).ToList());
             }
         }
     }

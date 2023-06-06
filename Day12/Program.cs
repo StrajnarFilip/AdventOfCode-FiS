@@ -24,16 +24,16 @@ public static class Program
 
         Matrix<Hill> matrix = new(hills.Chunk(matrixChars.ColumnsCount));
 
-        Graph<Hill> graph = new Graph<Hill>(matrix.AllValues());
+        Graph<Hill> graph = new(matrix.AllValues());
         for (int rowIndex = 0; rowIndex < matrix.RowCount; rowIndex++)
         {
             for (int columnIndex = 0; columnIndex < matrix.ColumnsCount; columnIndex++)
             {
                 var currentValue = matrix[rowIndex, columnIndex];
                 var neighbours = matrix.GetNeighbourIndices(rowIndex, columnIndex);
-                foreach (var neighbour in neighbours)
+                foreach (var (row, column) in neighbours)
                 {
-                    var neighbourValue = matrix[neighbour.row, neighbour.column];
+                    var neighbourValue = matrix[row, column];
                     if (neighbourValue.Height <= currentValue.Height + 1 || currentValue.Height == 'S')
                     {
                         graph.AddEdge(new Edge<Hill>(currentValue, neighbourValue, 1));

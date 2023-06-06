@@ -6,17 +6,24 @@ using System.Threading.Tasks;
 
 namespace Fprog.Algorithms.Common.Structures
 {
-    public class DijkstraNode<T> where T : IEquatable<T>
+    public sealed class DijkstraNode<T> where T : IEquatable<T>
     {
+        private List<Edge<T>>? _bestKnownPath;
         public bool Visited { get; set; }
         public T Vertex { get; }
-        public List<Edge<T>>? BestKnownPath { get; set; }
 
         public DijkstraNode(T vertex)
         {
             this.Vertex = vertex;
             this.Visited = false;
-            this.BestKnownPath = null;
+            this._bestKnownPath = null;
+        }
+
+        public List<Edge<T>>? BestKnownPath => _bestKnownPath;
+
+        public void ChangeBestPath(List<Edge<T>> newBestPath)
+        {
+            this._bestKnownPath = newBestPath;
         }
 
         public override string ToString()

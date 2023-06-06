@@ -23,6 +23,11 @@ namespace Day12
 
         public int Compare(Hill? x, Hill? y)
         {
+            if (x is null)
+                throw new ArgumentNullException(nameof(x));
+            if (y is null)
+                throw new ArgumentNullException(nameof(x));
+
             return x.Id.CompareTo(y.Id);
         }
 
