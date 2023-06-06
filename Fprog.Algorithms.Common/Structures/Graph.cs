@@ -89,8 +89,7 @@ namespace Fprog.Algorithms.Common.Structures
             Dictionary<T, DijkstraNode<T>> nodes = Vertices
                 .Select(vertex => new DijkstraNode<T>(vertex))
                 .ToDictionary(node => node.Vertex);
-            // Set of unvisited
-            HashSet<T> unvisited = Vertices.ToHashSet();
+            nodes[initial].BestKnownPath = new();
 
             return DijkstrasAlgorithmRecursive(nodes, new List<Edge<T>>(), nodes[initial]);
         }

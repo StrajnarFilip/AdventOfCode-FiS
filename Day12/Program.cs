@@ -7,13 +7,36 @@ public static class Program
 {
     public static void Main()
     {
-        Graph<int> graph = new(new[] { 1, 2, 3, 4, 5 });
-        graph.AddEdge(new Edge<int>(1, 3, 10));
-        graph.AddEdge(new Edge<int>(3, 4, 10));
-        graph.AddEdge(new Edge<int>(1, 2, 11));
-        graph.AddEdge(new Edge<int>(2, 4, 5));
+        Matrix<char> matrixChars = MatrixParse.ParseSingleCharacterMatrix("Assets/small.txt");
+        char[] chars = matrixChars.AllValues();
 
-        var result = graph.DijkstrasAlgorithm(1)[4];
-        Console.WriteLine( result.BestKnownPath.Sum(edge => edge.Weight));
+        List<Hill> hills = new(); 
+        for (int i = 0; i < chars.Length; i++)
+        {
+            hills.Add(new Hill(chars[i],i));
+        }
+
+        Matrix<Hill> matrix = new(hills.Chunk(matrixChars.ColumnsCount));
+
+        Graph<Hill> graph = new Graph<Hill>(matrix.AllValues());
+        for (int rowIndex = 0; rowIndex < matrix.RowCount; rowIndex++)
+        {
+            for (int columnIndex = 0; columnIndex < matrix.ColumnsCount; columnIndex++)
+            {
+                var currentValue = matrix[rowIndex, columnIndex];
+                var neighbours = matrix.GetNeighbourIndices(rowIndex, columnIndex);
+                foreach (var neighbour in neighbours)
+                {
+                    var neighbourValue = matrix[neighbour.row, neighbour.column];
+                    if (neighbourValue.Height <= currentValue.Height + 1 || currentValue.Height == 'S')
+                    {
+                        graph.AddEdge(new Edge<Hill>(currentValue, neighbourValue, 1));
+                    }
+                }
+            }
+        }
+
+        var distances = graph.DijkstrasAlgorithm(hills.First(hill => hill.Height == 'S'));
+        Console.WriteLine($"Shortest distance is: {distances[hills.First(hill => hill.Height == 'E')].BestKnownPath.Count}");
     }
 }
