@@ -47,6 +47,6 @@ public static class Program
     }
     public static void Main()
     {
-        new Thread(DoWork, 200_000).Start();
+        new Thread(DoWork, 2_000_000).Start();
     }
 }
