@@ -13,7 +13,7 @@ public static class Program
 
     public static void DoWork()
     {
-        Matrix<char> matrixChars = MatrixParse.ParseSingleCharacterMatrix("Assets/small.txt");
+        Matrix<char> matrixChars = MatrixParse.ParseSingleCharacterMatrix("Assets/data.txt");
         char[] chars = matrixChars.AllValues().Select(ch => ch == 'E' ? 'z' : ch).ToArray();
 
         List<Hill> hills = new();
@@ -41,12 +41,12 @@ public static class Program
                 }
             }
         }
-        int endId = RowAndColumnIndexToId(matrix, 2, 5);
+        int endId = RowAndColumnIndexToId(matrix, 20, 148);
         var distances = graph.DijkstrasAlgorithm(hills.First(hill => hill.Height == 'S'));
         Console.WriteLine($"Shortest distance is: {distances[hills.First(hill => hill.Id == endId)].BestKnownPath.Count}");
     }
     public static void Main()
     {
-        new Thread(DoWork, 400_000_000).Start();
+        new Thread(DoWork, 200_000).Start();
     }
 }

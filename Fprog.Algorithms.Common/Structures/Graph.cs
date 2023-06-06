@@ -91,71 +91,54 @@ namespace Fprog.Algorithms.Common.Structures
                 .ToDictionary(node => node.Vertex);
             nodes[initial].BestKnownPath = new();
 
-            return DijkstrasAlgorithmRecursive(nodes, new List<Edge<T>>(), nodes[initial]);
+            return DijkstrasAlgorithmRecursive(nodes, new List<T> { initial });
         }
 
         private Dictionary<T, DijkstraNode<T>> DijkstrasAlgorithmRecursive(
             Dictionary<T, DijkstraNode<T>> nodes,
-            List<Edge<T>> currentPath,
-            DijkstraNode<T> currentNode
+            List<T> toVisit
             )
         {
-            if (currentNode.Visited)
+            var nextToVisit = new List<T>();
+            foreach (var visit in toVisit)
             {
-                return nodes;
-            }
+                var node = nodes[visit];
+                if (node.Visited)
+                    continue;
 
-            var allNeighbours = this.OutNeighbours[currentNode.Vertex]
-                .OrderBy(neighbour => neighbour.Weight)
-                .ToArray();
-            var currentDistance = currentPath.Sum(edge => edge.Weight);
+                var currentPath = node.BestKnownPath;
+                var allNeighbours = this.OutNeighbours[visit]
+                    .OrderBy(neighbour => neighbour.Weight)
+                    .ToArray();
+                var currentDistance = currentPath.Sum(edge => edge.Weight);
 
-            foreach (var neighbour in allNeighbours)
-            {
-                var newDistance = currentDistance + neighbour.Weight;
-                var neighbourBestPath = nodes[neighbour.To].BestKnownPath;
-                if (neighbourBestPath is not null)
+                foreach (var neighbour in allNeighbours)
                 {
-                    var oldDistance = neighbourBestPath.Sum(edge => edge.Weight);
-                    if (oldDistance > newDistance)
+                    var newDistance = currentDistance + neighbour.Weight;
+                    var neighbourBestPath = nodes[neighbour.To].BestKnownPath;
+                    if (neighbourBestPath is not null)
+                    {
+                        var oldDistance = neighbourBestPath.Sum(edge => edge.Weight);
+                        if (oldDistance > newDistance)
+                        {
+                            nodes[neighbour.To].BestKnownPath = currentPath.Append(neighbour).ToList();
+                        }
+                    }
+                    else
                     {
                         nodes[neighbour.To].BestKnownPath = currentPath.Append(neighbour).ToList();
                     }
+
+                    nextToVisit.Add(neighbour.To);
                 }
-                else
-                {
-                    nodes[neighbour.To].BestKnownPath = currentPath.Append(neighbour).ToList();
-                }
+
+                node.Visited = true;
             }
 
-            currentNode.Visited = true;
-
-            foreach (var neighbour in allNeighbours)
-            {
-                var oldPath = nodes[neighbour.To].BestKnownPath;
-                var newPath = currentPath.Append(neighbour).ToList();
-                var newPathDistance = newPath.Sum(edge => edge.Weight);
-
-                if (oldPath is null)
-                {
-                    DijkstrasAlgorithmRecursive(
-                    nodes,
-                    newPath,
-                    nodes[neighbour.To]
-                    );
-                }
-                else
-                {
-                    var oldPathDistance = oldPath.Sum(edge => edge.Weight);
-                    DijkstrasAlgorithmRecursive(
-                    nodes,
-                    newPathDistance < oldPathDistance ? newPath : oldPath,
-                    nodes[neighbour.To]
-                    );
-                }
-            }
-
-            return nodes;
+            if (nextToVisit.Count > 0)
+                return DijkstrasAlgorithmRecursive(nodes, nextToVisit);
+            else
+                return nodes;
         }
     }
 }
