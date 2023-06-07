@@ -5,4 +5,10 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Performance", "CA1814:Prefer jagged arrays over multidimensional", Justification = "<Pending>", Scope = "member", Target = "~M:Fprog.Algorithms.Common.Structures.Matrix`1.#ctor(`0[,])")]
+[assembly: SuppressMessage(
+    "Performance",
+    "CA1814:Prefer jagged arrays over multidimensional",
+    Justification = "<Pending>",
+    Scope = "member",
+    Target = "~M:Fprog.Algorithms.Common.Structures.Matrix`1.#ctor(`0[,])"
+)]

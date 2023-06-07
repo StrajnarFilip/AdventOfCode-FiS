@@ -13,12 +13,15 @@ public static class Program
             if (i == 0 || i == visibility.Length - 1)
             {
                 // All true
-                visibility[i] = new bool[matrix.ColumnsCount].Select(el => true).ToArray();
+                visibility[i] = new bool[matrix.ColumnsCount]
+                    .Select(el => true)
+                    .ToArray();
                 continue;
             }
 
-
-            var row = new bool[matrix.ColumnsCount].Select(el => false).ToArray();
+            var row = new bool[matrix.ColumnsCount]
+                .Select(el => false)
+                .ToArray();
             row[0] = true;
             row[visibility.Length - 1] = true;
             visibility[i] = row;
@@ -143,7 +146,6 @@ public static class Program
         return visibleTrees;
     }
 
-
     /// <summary>
     /// Calculates scenic score of a single element (tree) in the matrix.
     /// </summary>
@@ -197,7 +199,6 @@ public static class Program
     {
         return ScenicScoreMatrix(matrix).AllValues().Max();
     }
-
 
     public static void Main()
     {

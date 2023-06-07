@@ -12,7 +12,11 @@ namespace Day12
         public char Height { get; }
         public int Id { get; }
 
-        public Hill(char height, int id) { Height = height; Id = id; }
+        public Hill(char height, int id)
+        {
+            Height = height;
+            Id = id;
+        }
 
         public bool Equals(Hill? other)
         {

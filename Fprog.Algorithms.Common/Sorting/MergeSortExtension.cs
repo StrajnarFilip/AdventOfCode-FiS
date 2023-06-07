@@ -8,7 +8,8 @@ namespace Fprog.Algorithms.Common.Sorting
 {
     public static class MergeSortExtension
     {
-        public static IEnumerable<T> MergeSort<T>(this IEnumerable<T> collection) where T : IComparable<T>
+        public static IEnumerable<T> MergeSort<T>(this IEnumerable<T> collection)
+            where T : IComparable<T>
         {
             if (collection is null)
                 return Array.Empty<T>();
@@ -17,7 +18,6 @@ namespace Fprog.Algorithms.Common.Sorting
 
             if (count == 1)
                 return collection;
-
 
             IEnumerable<T> firstPart = collection.Take(count / 2);
             IEnumerable<T> lastPart = collection.Skip(count / 2);

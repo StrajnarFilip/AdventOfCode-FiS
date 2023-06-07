@@ -22,8 +22,12 @@ public static class Program
         var minimalDistance = hills
             .Where(hill => hill.Height == 'S' || hill.Height == 'a')
             .Select(graph.DijkstrasAlgorithm)
-            .Where(distances => distances[hills.First(hill => hill.Id == endId)].BestKnownPath != null)
-            .Select(distances => distances[hills.First(hill => hill.Id == endId)].BestKnownPath.Count)
+            .Where(
+                distances => distances[hills.First(hill => hill.Id == endId)].BestKnownPath != null
+            )
+            .Select(
+                distances => distances[hills.First(hill => hill.Id == endId)].BestKnownPath.Count
+            )
             .Min();
 
         return minimalDistance;
@@ -52,7 +56,10 @@ public static class Program
                 foreach (var (row, column) in neighbours)
                 {
                     var neighbourValue = matrix[row, column];
-                    if (neighbourValue.Height <= currentValue.Height + 1 || currentValue.Height == 'S')
+                    if (
+                        neighbourValue.Height <= currentValue.Height + 1
+                        || currentValue.Height == 'S'
+                    )
                     {
                         graph.AddEdge(new Edge<Hill>(currentValue, neighbourValue, 1));
                     }
@@ -61,8 +68,11 @@ public static class Program
         }
         int endId = RowAndColumnIndexToId(matrix, 20, 148);
 
-        Console.WriteLine($"Part 1: {Part1(graph, hills, endId)}, Part 2: {Part2(graph, hills, endId)}");
+        Console.WriteLine(
+            $"Part 1: {Part1(graph, hills, endId)}, Part 2: {Part2(graph, hills, endId)}"
+        );
     }
+
     public static void Main()
     {
         new Thread(DoWork, 4_000_000).Start();

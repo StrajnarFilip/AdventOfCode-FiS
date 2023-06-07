@@ -9,7 +9,8 @@ namespace Fprog.Algorithms.Common.Sorting
 {
     public static class BubbleSortExtension
     {
-        public static IEnumerable<T> BubbleSort<T>(this IEnumerable<T> collection) where T : IComparable<T>
+        public static IEnumerable<T> BubbleSort<T>(this IEnumerable<T> collection)
+            where T : IComparable<T>
         {
             if (collection is null)
                 return Array.Empty<T>();

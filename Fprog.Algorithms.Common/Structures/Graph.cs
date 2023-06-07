@@ -11,15 +11,14 @@ using System.Xml.Linq;
 
 namespace Fprog.Algorithms.Common.Structures
 {
-    public class Graph<T> where T : IEquatable<T>
+    public class Graph<T>
+        where T : IEquatable<T>
     {
         public HashSet<T> Vertices { get; } = new();
         List<Edge<T>> Edges { get; } = new();
         public Dictionary<T, HashSet<Edge<T>>> OutNeighbours { get; } = new();
 
-        public Graph()
-        {
-        }
+        public Graph() { }
 
         public Graph(IEnumerable<T> vertices)
         {
@@ -32,7 +31,8 @@ namespace Fprog.Algorithms.Common.Structures
             }
         }
 
-        public Graph(IEnumerable<T> vertices, IEnumerable<Edge<T>> edges) : this(vertices)
+        public Graph(IEnumerable<T> vertices, IEnumerable<Edge<T>> edges)
+            : this(vertices)
         {
             AddEdges(edges);
         }
@@ -99,7 +99,7 @@ namespace Fprog.Algorithms.Common.Structures
         private void DijkstrasAlgorithmRecursive(
             Dictionary<T, DijkstraNode<T>> nodes,
             List<T> verticesToVisit
-            )
+        )
         {
             var nextToVisit = new List<T>();
             foreach (var vertex in verticesToVisit)
@@ -109,7 +109,11 @@ namespace Fprog.Algorithms.Common.Structures
                 DijkstrasAlgorithmRecursive(nodes, nextToVisit);
         }
 
-        private void VisitVertex(Dictionary<T, DijkstraNode<T>> nodes, List<T> nextToVisit, T vertex)
+        private void VisitVertex(
+            Dictionary<T, DijkstraNode<T>> nodes,
+            List<T> nextToVisit,
+            T vertex
+        )
         {
             var node = nodes[vertex];
             if (node.Visited)
@@ -125,7 +129,12 @@ namespace Fprog.Algorithms.Common.Structures
             node.Visited = true;
         }
 
-        private static void AddVisitNeighbours(Dictionary<T, DijkstraNode<T>> nodes, List<T> nextToVisit, DijkstraNode<T> node, Edge<T> neighbour)
+        private static void AddVisitNeighbours(
+            Dictionary<T, DijkstraNode<T>> nodes,
+            List<T> nextToVisit,
+            DijkstraNode<T> node,
+            Edge<T> neighbour
+        )
         {
             if (node.BestKnownPath is null)
                 return;
@@ -133,10 +142,20 @@ namespace Fprog.Algorithms.Common.Structures
             var currentBestPath = node.BestKnownPath;
             var neighbourBestPath = nodes[neighbour.To].BestKnownPath;
 
-            CalculateBestKnownPath(nodes[neighbour.To], neighbourBestPath, currentBestPath, neighbour);
+            CalculateBestKnownPath(
+                nodes[neighbour.To],
+                neighbourBestPath,
+                currentBestPath,
+                neighbour
+            );
         }
 
-        private static void CalculateBestKnownPath(DijkstraNode<T> neighbourNode, List<Edge<T>>? neighbourBestPath, List<Edge<T>> currentBestPath, Edge<T> neighbour)
+        private static void CalculateBestKnownPath(
+            DijkstraNode<T> neighbourNode,
+            List<Edge<T>>? neighbourBestPath,
+            List<Edge<T>> currentBestPath,
+            Edge<T> neighbour
+        )
         {
             if (neighbourBestPath is null)
             {

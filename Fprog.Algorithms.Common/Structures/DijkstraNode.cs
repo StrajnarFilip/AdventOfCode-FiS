@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Fprog.Algorithms.Common.Structures
 {
-    public sealed class DijkstraNode<T> where T : IEquatable<T>
+    public sealed class DijkstraNode<T>
+        where T : IEquatable<T>
     {
         private List<Edge<T>>? _bestKnownPath;
         public bool Visited { get; set; }

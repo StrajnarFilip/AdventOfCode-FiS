@@ -30,12 +30,14 @@ namespace Fprog.Algorithms.Common.Structures
             get => _matrix[rowIndex][columnIndex];
         }
 
-        public T[][] MatrixCopy() => _matrix.Select(row => row.Select(el => el).ToArray()).ToArray();
+        public T[][] MatrixCopy() =>
+            _matrix.Select(row => row.Select(el => el).ToArray()).ToArray();
 
         public int RowCount => this._matrix.Length;
         public int ColumnsCount => this._matrix[0].Length;
 
         public T[] GetRow(int index) => this._matrix[index];
+
         public T[] GetColumn(int index) => this._matrix.Select(row => row[index]).ToArray();
 
         public T? GetElement(int rowIndex, int columnIndex)
@@ -52,11 +54,18 @@ namespace Fprog.Algorithms.Common.Structures
         }
 
         public bool RowIndexInBounds(int rowIndex) => rowIndex < RowCount && rowIndex >= 0;
-        public bool ColumnIndexInBounds(int columnIndex) => columnIndex < ColumnsCount && columnIndex >= 0;
-        public bool IndicesInBounds(int rowIndex, int columnIndex)
-            => RowIndexInBounds(rowIndex) && ColumnIndexInBounds(columnIndex);
 
-        public (int row, int column)[] GetNeighbourIndices(int rowIndex, int columnIndex, bool includeDiagonal = false)
+        public bool ColumnIndexInBounds(int columnIndex) =>
+            columnIndex < ColumnsCount && columnIndex >= 0;
+
+        public bool IndicesInBounds(int rowIndex, int columnIndex) =>
+            RowIndexInBounds(rowIndex) && ColumnIndexInBounds(columnIndex);
+
+        public (int row, int column)[] GetNeighbourIndices(
+            int rowIndex,
+            int columnIndex,
+            bool includeDiagonal = false
+        )
         {
             List<(int row, int column)> validNeighbourIndices = new();
             // Left
@@ -91,15 +100,26 @@ namespace Fprog.Algorithms.Common.Structures
             return validNeighbourIndices.ToArray();
         }
 
-        public T[] GetNeighbourValues(int rowIndex, int columnIndex, bool includeDiagonal = false)
-            => GetNeighbourIndices(rowIndex, columnIndex, includeDiagonal)
-            .Select(index => _matrix[index.row][index.column])
-            .ToArray();
+        public T[] GetNeighbourValues(
+            int rowIndex,
+            int columnIndex,
+            bool includeDiagonal = false
+        ) =>
+            GetNeighbourIndices(rowIndex, columnIndex, includeDiagonal)
+                .Select(index => _matrix[index.row][index.column])
+                .ToArray();
 
         public T[][] Slice(int rowIndexFrom, int rowIndexTo, int columnIndexFrom, int columnIndexTo)
         {
-            return this._matrix.Skip(rowIndexFrom).Take(rowIndexTo - rowIndexFrom + 1)
-                .Select(row => row.Skip(columnIndexFrom).Take(columnIndexTo - columnIndexFrom + 1).ToArray())
+            return this._matrix
+                .Skip(rowIndexFrom)
+                .Take(rowIndexTo - rowIndexFrom + 1)
+                .Select(
+                    row =>
+                        row.Skip(columnIndexFrom)
+                            .Take(columnIndexTo - columnIndexFrom + 1)
+                            .ToArray()
+                )
                 .ToArray();
         }
 

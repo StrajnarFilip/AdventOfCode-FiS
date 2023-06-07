@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Fprog.Algorithms.Common.Structures
 {
-    public class Edge<T> where T : IEquatable<T>
+    public class Edge<T>
+        where T : IEquatable<T>
     {
         public T From { get; }
         public T To { get; }
