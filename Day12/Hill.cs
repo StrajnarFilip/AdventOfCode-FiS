@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Day12
 {
-    internal class Hill : IEquatable<Hill>, IComparer<Hill>
+    internal class Hill : IEquatable<Hill>
     {
         public char Height { get; }
         public int Id { get; }
@@ -23,21 +23,6 @@ namespace Day12
             if (other is null)
                 return false;
             return other.Id == Id;
-        }
-
-        public int Compare(Hill? x, Hill? y)
-        {
-            if (x is null)
-                throw new ArgumentNullException(nameof(x));
-            if (y is null)
-                throw new ArgumentNullException(nameof(x));
-
-            return x.Id.CompareTo(y.Id);
-        }
-
-        public override int GetHashCode()
-        {
-            return $"{this.Height} {this.Id}".GetHashCode();
         }
 
         public override string ToString()
