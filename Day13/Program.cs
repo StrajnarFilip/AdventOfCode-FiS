@@ -4,68 +4,22 @@
     using System.Text.Json;
     using System.Text.Json.Nodes;
     using System.Text.Json.Serialization;
+    using System.Xml.XPath;
     using Fprog.Algorithms.Common;
+    using Fprog.Algorithms.Common.Sorting;
 
     internal class Program
     {
-        private static bool? ComparePair(IEnumerable<JsonElement> documentPair)
-        {
-            var left = documentPair.ElementAt(0);
-            var right = documentPair.ElementAt(1);
-
-            if (left.ValueKind == JsonValueKind.Number && right.ValueKind == JsonValueKind.Number)
-            {
-                if (left.GetInt32() < right.GetInt32())
-                    return true;
-                if (left.GetInt32() > right.GetInt32())
-                    return false;
-
-                return null;
-            }
-
-            if (left.ValueKind == JsonValueKind.Number)
-            {
-                var leftAsList = new List<int> { left.GetInt32() };
-                var listAsJson = JsonDocument.Parse(JsonSerializer.Serialize(leftAsList));
-                return ComparePair(new JsonElement[] { listAsJson.RootElement, right });
-            }
-
-            if (right.ValueKind == JsonValueKind.Number)
-            {
-                var rightAsList = new List<int> { right.GetInt32() };
-                var listAsJson = JsonDocument.Parse(JsonSerializer.Serialize(rightAsList));
-                return ComparePair(new JsonElement[] { left, listAsJson.RootElement });
-            }
-
-            if (left.ValueKind == JsonValueKind.Array && right.ValueKind == JsonValueKind.Array)
-            {
-                int leftSize = left.GetArrayLength();
-                int rightSize = right.GetArrayLength();
-                for (int i = 0; i < Math.Max(leftSize, rightSize); i++)
-                {
-                    if (i >= leftSize)
-                        return true;
-                    if (i >= rightSize)
-                        return false;
-
-                    bool? result = ComparePair(new JsonElement[] { left[i], right[i] });
-                    if (result is not null)
-                        return result;
-                }
-
-                return null;
-            }
-
-            return null;
-        }
-
-        private static int Part1(IEnumerable<IEnumerable<JsonElement>> documentPairs)
+        private static int Part1(
+            IEnumerable<(ComparableJsonElement Left, ComparableJsonElement Right)> documentPairs
+        )
         {
             int sum = 0;
             for (int i = 1; i <= documentPairs.Count(); i++)
             {
-                var result = ComparePair(documentPairs.ElementAt(i - 1));
-                if (result is not null && result == true)
+                var pair = documentPairs.ElementAt(i - 1);
+                var result = pair.Left.CompareTo(pair.Right);
+                if (result < 0)
                 {
                     sum += i;
                 }
@@ -74,16 +28,48 @@
             return sum;
         }
 
+        private static int Part2(
+            IEnumerable<(ComparableJsonElement Left, ComparableJsonElement Right)> documentPairs
+        )
+        {
+            var flattened = documentPairs.SelectMany(el => new[] { el.Left, el.Right });
+            var modified = flattened
+                .Append(new ComparableJsonElement("[[2]]"))
+                .Append(new ComparableJsonElement("[[6]]"));
+
+            int index = 1;
+            int dividerTwoIndex = -1;
+            int dividerSixIndex = -1;
+
+            foreach (var item in modified.Order())
+            {
+                if (item.JsonElement.GetRawText() == "[[2]]")
+                    dividerTwoIndex = index;
+
+                if (item.JsonElement.GetRawText() == "[[6]]")
+                    dividerSixIndex = index;
+
+                index++;
+            }
+
+            return dividerTwoIndex * dividerSixIndex;
+        }
+
         static void Main(string[] args)
         {
             var pairs = File.ReadAllLines("Assets/data.txt")
                 .Where(line => line.Length > 0)
                 .Chunk(2);
+
             var documentPairs = pairs.Select(
-                pair => pair.Select(line => JsonDocument.Parse(line).RootElement)
+                pair =>
+                    (
+                        Left: new ComparableJsonElement(JsonDocument.Parse(pair[0]).RootElement),
+                        Right: new ComparableJsonElement(JsonDocument.Parse(pair[1]).RootElement)
+                    )
             );
 
-            Console.WriteLine($"Part 1: {Part1(documentPairs)}, Part 2:");
+            Console.WriteLine($"Part 1: {Part1(documentPairs)}, Part 2: {Part2(documentPairs)}");
         }
     }
 }
