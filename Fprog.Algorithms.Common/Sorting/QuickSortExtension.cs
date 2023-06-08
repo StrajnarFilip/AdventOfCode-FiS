@@ -16,7 +16,7 @@ namespace Fprog.Algorithms.Common.Sorting
 
             T[] values = collection.ToArray();
 
-            return values;
+            throw new NotImplementedException();
         }
     }
 }

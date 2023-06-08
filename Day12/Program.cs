@@ -6,28 +6,20 @@ using Fprog.Algorithms.Common.Structures;
 
 public static class Program
 {
-    private static int RowAndColumnIndexToId<T>(Matrix<T> matrix, int rowIndex, int columnIndex)
+    private static int Part1(Graph<Hill> graph, List<Hill> hills)
     {
-        return matrix.ColumnsCount * rowIndex + columnIndex;
+        var distances = graph.DijkstrasAlgorithm(hills.Single(hill => hill.StartNode));
+        var endNode = hills.Single(hill => hill.EndNode);
+        return distances[endNode].BestKnownPath.Count;
     }
 
-    private static int Part1(Graph<Hill> graph, List<Hill> hills, int endId)
-    {
-        var distances = graph.DijkstrasAlgorithm(hills.First(hill => hill.Height == 'S'));
-        return distances[hills.First(hill => hill.Id == endId)].BestKnownPath.Count;
-    }
-
-    private static int Part2(Graph<Hill> graph, List<Hill> hills, int endId)
+    private static int Part2(Graph<Hill> graph, List<Hill> hills)
     {
         var minimalDistance = hills
             .Where(hill => hill.Height == 'S' || hill.Height == 'a')
             .Select(graph.DijkstrasAlgorithm)
-            .Where(
-                distances => distances[hills.First(hill => hill.Id == endId)].BestKnownPath != null
-            )
-            .Select(
-                distances => distances[hills.First(hill => hill.Id == endId)].BestKnownPath.Count
-            )
+            .Where(distances => distances[hills.Single(hill => hill.EndNode)].BestKnownPath != null)
+            .Select(distances => distances[hills.Single(hill => hill.EndNode)].BestKnownPath.Count)
             .Min();
 
         return minimalDistance;
@@ -36,13 +28,11 @@ public static class Program
     private static void DoWork()
     {
         Matrix<char> matrixChars = MatrixParse.ParseSingleCharacterMatrix("Assets/data.txt");
-        char[] chars = matrixChars.AllValues().Select(ch => ch == 'E' ? 'z' : ch).ToArray();
+        char[] chars = matrixChars.AllValues().ToArray();
 
         List<Hill> hills = new();
         for (int i = 0; i < chars.Length; i++)
-        {
             hills.Add(new Hill(chars[i], i));
-        }
 
         Matrix<Hill> matrix = new(hills.Chunk(matrixChars.ColumnsCount));
 
@@ -66,11 +56,9 @@ public static class Program
                 }
             }
         }
-        int endId = RowAndColumnIndexToId(matrix, 20, 148);
+        int endId = graph.Vertices.Single(vertex => vertex.EndNode).Id;
 
-        Console.WriteLine(
-            $"Part 1: {Part1(graph, hills, endId)}, Part 2: {Part2(graph, hills, endId)}"
-        );
+        Console.WriteLine($"Part 1: {Part1(graph, hills)}, Part 2: {Part2(graph, hills)}");
     }
 
     public static void Main()

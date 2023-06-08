@@ -11,9 +11,22 @@ namespace Day12
     {
         public char Height { get; }
         public int Id { get; }
+        public bool StartNode { get; }
+        public bool EndNode { get; }
 
         public Hill(char height, int id)
         {
+            if (height == 'S')
+                StartNode = true;
+
+            if (height == 'E')
+            {
+                Height = 'z';
+                EndNode = true;
+                Id = id;
+                return;
+            }
+
             Height = height;
             Id = id;
         }
