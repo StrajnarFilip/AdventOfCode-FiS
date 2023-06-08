@@ -23,6 +23,16 @@ namespace Day16
             return (valveName, rate, outNeighbours);
         }
 
+        private static int Part1()
+        {
+            throw new NotImplementedException();
+        }
+
+        private static int Part2()
+        {
+            throw new NotImplementedException();
+        }
+
         static void Main(string[] args)
         {
             var lines = File.ReadAllLines("Assets/test.txt");
@@ -39,6 +49,8 @@ namespace Day16
                     graph.AddEdge(new Edge<Valve>(currentValve, currentNeighbour, 1));
                 }
             }
+
+            Console.WriteLine($"Part 1: {Part1()}, Part 2: {Part2()}");
         }
     }
 }
