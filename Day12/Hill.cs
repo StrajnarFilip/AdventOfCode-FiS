@@ -16,9 +16,6 @@ namespace Day12
 
         public Hill(char height, int id)
         {
-            if (height == 'S')
-                StartNode = true;
-
             if (height == 'E')
             {
                 Height = 'z';
@@ -26,6 +23,9 @@ namespace Day12
                 Id = id;
                 return;
             }
+
+            if (height == 'S')
+                StartNode = true;
 
             Height = height;
             Id = id;
