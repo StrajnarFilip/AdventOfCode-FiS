@@ -1,0 +1,98 @@
+name: AA rate: 0 neighbours: [ DD, II, BB ]
+name: BB rate: 13 neighbours: [ CC, AA ]
+name: CC rate: 2 neighbours: [ DD, BB ]
+name: DD rate: 20 neighbours: [ CC, AA, EE ]
+name: EE rate: 3 neighbours: [ FF, DD ]
+name: FF rate: 0 neighbours: [ EE, GG ]
+name: GG rate: 0 neighbours: [ FF, HH ]
+name: HH rate: 22 neighbours: [ GG ]
+name: II rate: 0 neighbours: [ AA, JJ ]
+name: JJ rate: 21 neighbours: [ II ]
+Looking at node: AA, opening this one releases: 0, Time left 30, Flow rate 0 Previous step released: 0
+Looking at node: DD, opening this one releases: 560, Time left 29, Flow rate 20 Previous step released: 0
+Looking at node: CC, opening this one releases: 54, Time left 28, Flow rate 2 Previous step released: 0
+Looking at node: BB, opening this one releases: 338, Time left 27, Flow rate 13 Previous step released: 0
+Looking at node: BB, opening this one releases: 325, Time left 26, Flow rate 13 Previous step released: 54
+Looking at node: EE, opening this one releases: 81, Time left 28, Flow rate 3 Previous step released: 0
+Looking at node: FF, opening this one releases: 0, Time left 27, Flow rate 0 Previous step released: 0
+Looking at node: GG, opening this one releases: 0, Time left 26, Flow rate 0 Previous step released: 0
+Looking at node: HH, opening this one releases: 528, Time left 25, Flow rate 22 Previous step released: 0
+Looking at node: FF, opening this one releases: 0, Time left 26, Flow rate 0 Previous step released: 81
+Looking at node: GG, opening this one releases: 0, Time left 25, Flow rate 0 Previous step released: 81
+Looking at node: HH, opening this one releases: 506, Time left 24, Flow rate 22 Previous step released: 81
+Looking at node: CC, opening this one releases: 52, Time left 27, Flow rate 2 Previous step released: 560
+Looking at node: BB, opening this one releases: 325, Time left 26, Flow rate 13 Previous step released: 560
+Looking at node: BB, opening this one releases: 312, Time left 25, Flow rate 13 Previous step released: 612
+Looking at node: EE, opening this one releases: 78, Time left 27, Flow rate 3 Previous step released: 560
+Looking at node: FF, opening this one releases: 0, Time left 26, Flow rate 0 Previous step released: 560
+Looking at node: GG, opening this one releases: 0, Time left 25, Flow rate 0 Previous step released: 560
+Looking at node: HH, opening this one releases: 506, Time left 24, Flow rate 22 Previous step released: 560
+Looking at node: FF, opening this one releases: 0, Time left 25, Flow rate 0 Previous step released: 638
+Looking at node: GG, opening this one releases: 0, Time left 24, Flow rate 0 Previous step released: 638
+Looking at node: HH, opening this one releases: 484, Time left 23, Flow rate 22 Previous step released: 638
+Looking at node: II, opening this one releases: 0, Time left 29, Flow rate 0 Previous step released: 0
+Looking at node: JJ, opening this one releases: 567, Time left 28, Flow rate 21 Previous step released: 0
+Looking at node: BB, opening this one releases: 364, Time left 29, Flow rate 13 Previous step released: 0
+Looking at node: CC, opening this one releases: 54, Time left 28, Flow rate 2 Previous step released: 0
+Looking at node: DD, opening this one releases: 520, Time left 27, Flow rate 20 Previous step released: 0
+Looking at node: EE, opening this one releases: 75, Time left 26, Flow rate 3 Previous step released: 0
+Looking at node: FF, opening this one releases: 0, Time left 25, Flow rate 0 Previous step released: 0
+Looking at node: GG, opening this one releases: 0, Time left 24, Flow rate 0 Previous step released: 0
+Looking at node: HH, opening this one releases: 484, Time left 23, Flow rate 22 Previous step released: 0
+Looking at node: FF, opening this one releases: 0, Time left 24, Flow rate 0 Previous step released: 75
+Looking at node: GG, opening this one releases: 0, Time left 23, Flow rate 0 Previous step released: 75
+Looking at node: HH, opening this one releases: 462, Time left 22, Flow rate 22 Previous step released: 75
+Looking at node: EE, opening this one releases: 72, Time left 25, Flow rate 3 Previous step released: 520
+Looking at node: FF, opening this one releases: 0, Time left 24, Flow rate 0 Previous step released: 520
+Looking at node: GG, opening this one releases: 0, Time left 23, Flow rate 0 Previous step released: 520
+Looking at node: HH, opening this one releases: 462, Time left 22, Flow rate 22 Previous step released: 520
+Looking at node: FF, opening this one releases: 0, Time left 23, Flow rate 0 Previous step released: 592
+Looking at node: GG, opening this one releases: 0, Time left 22, Flow rate 0 Previous step released: 592
+Looking at node: HH, opening this one releases: 440, Time left 21, Flow rate 22 Previous step released: 592
+Looking at node: DD, opening this one releases: 500, Time left 26, Flow rate 20 Previous step released: 54
+Looking at node: EE, opening this one releases: 72, Time left 25, Flow rate 3 Previous step released: 54
+Looking at node: FF, opening this one releases: 0, Time left 24, Flow rate 0 Previous step released: 54
+Looking at node: GG, opening this one releases: 0, Time left 23, Flow rate 0 Previous step released: 54
+Looking at node: HH, opening this one releases: 462, Time left 22, Flow rate 22 Previous step released: 54
+Looking at node: FF, opening this one releases: 0, Time left 23, Flow rate 0 Previous step released: 126
+Looking at node: GG, opening this one releases: 0, Time left 22, Flow rate 0 Previous step released: 126
+Looking at node: HH, opening this one releases: 440, Time left 21, Flow rate 22 Previous step released: 126
+Looking at node: EE, opening this one releases: 69, Time left 24, Flow rate 3 Previous step released: 554
+Looking at node: FF, opening this one releases: 0, Time left 23, Flow rate 0 Previous step released: 554
+Looking at node: GG, opening this one releases: 0, Time left 22, Flow rate 0 Previous step released: 554
+Looking at node: HH, opening this one releases: 440, Time left 21, Flow rate 22 Previous step released: 554
+Looking at node: FF, opening this one releases: 0, Time left 22, Flow rate 0 Previous step released: 623
+Looking at node: GG, opening this one releases: 0, Time left 21, Flow rate 0 Previous step released: 623
+Looking at node: HH, opening this one releases: 418, Time left 20, Flow rate 22 Previous step released: 623
+Looking at node: CC, opening this one releases: 52, Time left 27, Flow rate 2 Previous step released: 364
+Looking at node: DD, opening this one releases: 500, Time left 26, Flow rate 20 Previous step released: 364
+Looking at node: EE, opening this one releases: 72, Time left 25, Flow rate 3 Previous step released: 364
+Looking at node: FF, opening this one releases: 0, Time left 24, Flow rate 0 Previous step released: 364
+Looking at node: GG, opening this one releases: 0, Time left 23, Flow rate 0 Previous step released: 364
+Looking at node: HH, opening this one releases: 462, Time left 22, Flow rate 22 Previous step released: 364
+Looking at node: FF, opening this one releases: 0, Time left 23, Flow rate 0 Previous step released: 436
+Looking at node: GG, opening this one releases: 0, Time left 22, Flow rate 0 Previous step released: 436
+Looking at node: HH, opening this one releases: 440, Time left 21, Flow rate 22 Previous step released: 436
+Looking at node: EE, opening this one releases: 69, Time left 24, Flow rate 3 Previous step released: 864
+Looking at node: FF, opening this one releases: 0, Time left 23, Flow rate 0 Previous step released: 864
+Looking at node: GG, opening this one releases: 0, Time left 22, Flow rate 0 Previous step released: 864
+Looking at node: HH, opening this one releases: 440, Time left 21, Flow rate 22 Previous step released: 864
+Looking at node: FF, opening this one releases: 0, Time left 22, Flow rate 0 Previous step released: 933
+Looking at node: GG, opening this one releases: 0, Time left 21, Flow rate 0 Previous step released: 933
+Looking at node: HH, opening this one releases: 418, Time left 20, Flow rate 22 Previous step released: 933
+Looking at node: DD, opening this one releases: 480, Time left 25, Flow rate 20 Previous step released: 416
+Looking at node: EE, opening this one releases: 69, Time left 24, Flow rate 3 Previous step released: 416
+Looking at node: FF, opening this one releases: 0, Time left 23, Flow rate 0 Previous step released: 416
+Looking at node: GG, opening this one releases: 0, Time left 22, Flow rate 0 Previous step released: 416
+Looking at node: HH, opening this one releases: 440, Time left 21, Flow rate 22 Previous step released: 416
+Looking at node: FF, opening this one releases: 0, Time left 22, Flow rate 0 Previous step released: 485
+Looking at node: GG, opening this one releases: 0, Time left 21, Flow rate 0 Previous step released: 485
+Looking at node: HH, opening this one releases: 418, Time left 20, Flow rate 22 Previous step released: 485
+Looking at node: EE, opening this one releases: 66, Time left 23, Flow rate 3 Previous step released: 896
+Looking at node: FF, opening this one releases: 0, Time left 22, Flow rate 0 Previous step released: 896
+Looking at node: GG, opening this one releases: 0, Time left 21, Flow rate 0 Previous step released: 896
+Looking at node: HH, opening this one releases: 418, Time left 20, Flow rate 22 Previous step released: 896
+Looking at node: FF, opening this one releases: 0, Time left 21, Flow rate 0 Previous step released: 962
+Looking at node: GG, opening this one releases: 0, Time left 20, Flow rate 0 Previous step released: 962
+Looking at node: HH, opening this one releases: 396, Time left 19, Flow rate 22 Previous step released: 962
+Part 1: 1358, Part 2: 0

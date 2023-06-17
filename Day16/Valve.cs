@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Day16
 {
-    internal class Valve : IEquatable<Valve>
+    public class Valve : IEquatable<Valve>
     {
         public int FlowRate { get; }
         public string Name { get; }
