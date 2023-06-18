@@ -25,12 +25,13 @@ namespace Day16
 
         private static int ValveOpenings(Graph<Valve> graph)
         {
-            return ValveOpeningRecursive(graph, new(), graph.Vertices.First(), 0, 20);
+            return ValveOpeningRecursive(graph, new(), new(), graph.Vertices.First(), 0, 30);
         }
 
         private static int ValveOpeningRecursive(
             Graph<Valve> graph,
             List<Valve> visited,
+            List<Valve> opened,
             Valve current,
             int previousStepsReleased,
             int timeLeft
@@ -40,6 +41,11 @@ namespace Day16
             // TODO: might have to be removed.
             if (timeLeft < 1 || graph.Vertices.All(visited.Contains))
                 return previousStepsReleased;
+
+            if (graph.Vertices.Where(vertex => vertex.FlowRate > 0).All(opened.Contains))
+            {
+                return previousStepsReleased;
+            }
 
             List<Valve> newVisited = visited.Append(current).ToList();
             // Pressure released, if we decide to open.
@@ -53,6 +59,7 @@ namespace Day16
                         ValveOpeningRecursive(
                             graph,
                             newVisited,
+                            opened,
                             neighbour.To,
                             previousStepsReleased,
                             timeLeft - 1
@@ -63,7 +70,7 @@ namespace Day16
                 ? outcomesIfLeftClosed.Max()
                 : previousStepsReleased;
 
-            if (timeLeft >= 2 && current.FlowRate > 0)
+            if (timeLeft >= 2 && current.FlowRate > 0 && !opened.Contains(current))
             {
                 // Decide to open the valve
                 int[] outcomesIfOpened = neighboursToVisit
@@ -72,6 +79,7 @@ namespace Day16
                             ValveOpeningRecursive(
                                 graph,
                                 newVisited,
+                                opened.Append(current).ToList(),
                                 neighbour.To,
                                 previousStepsReleased + openingRelased,
                                 timeLeft - 2
