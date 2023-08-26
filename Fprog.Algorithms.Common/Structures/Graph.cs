@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
@@ -169,6 +170,34 @@ namespace Fprog.Algorithms.Common.Structures
 
             if (oldDistance > newBestDistance)
                 neighbourNode.ChangeBestPath(currentBestPath.Append(neighbour).ToList());
+        }
+
+        public Dictionary<T, List<Edge<T>>> FloydWarshallAlgorithm()
+        {
+            throw new NotImplementedException();
+        }
+
+        // This is a replacement for Floyd Warshall
+        public Dictionary<(T starting, T ending), List<Edge<T>>> QuickestPaths()
+        {
+            Dictionary<(T starting, T ending), List<Edge<T>>> paths = new();
+
+            foreach (T startingVertex in Vertices)
+            {
+                var quickestPathsFromVertex = DijkstrasAlgorithm(startingVertex);
+                foreach (T endingVertex in Vertices)
+                {
+                    var quickestPathsToCurrent = quickestPathsFromVertex[
+                        endingVertex
+                    ].BestKnownPath;
+                    if (quickestPathsToCurrent != null)
+                    {
+                        paths[(startingVertex, endingVertex)] = quickestPathsToCurrent;
+                    }
+                }
+            }
+
+            return paths;
         }
     }
 }

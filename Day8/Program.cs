@@ -1,4 +1,5 @@
 ﻿namespace Day8;
+
 using Common.Parsing;
 using Fprog.Algorithms.Common.Structures;
 
