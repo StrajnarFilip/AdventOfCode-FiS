@@ -7,6 +7,7 @@ namespace Day16
     internal class Program
     {
         private const int startingMinutes = 30;
+        private const int startingMinutesWithElephant = 26;
 
         private static (string Valve, int Rate, string[] OutNeighbours) ExtractData(string line)
         {
@@ -31,21 +32,22 @@ namespace Day16
                 graph.QuickestPaths();
 
             var startingValve = graph.Vertices.Single(valve => valve.Name == "AA");
-            var valvesToVisit = graph.Vertices.Where(
-                vertex => vertex.FlowRate > 0 && vertex != startingValve
+            IEnumerable<Valve> valvesToVisit = graph.Vertices.Where(
+                vertex => vertex.FlowRate > 0 && !vertex.Equals(startingValve)
             );
+
             var released = startingValve.FlowRate * (startingMinutes - 1);
+            var me = new TraversingEntity("Me", startingMinutes, startingValve);
 
             int outcomesLeftClosed = valvesToVisit
                 .Select(
                     valve =>
                         ValveOpeningRecursive(
+                            me.MakeMoves(quickestPaths[(startingValve, valve)]),
                             graph,
                             new List<Valve>() { },
-                            valve,
                             quickestPaths,
-                            0,
-                            startingMinutes - quickestPaths[(startingValve, valve)].Count
+                            0
                         )
                 )
                 .Max();
@@ -54,12 +56,11 @@ namespace Day16
                 .Select(
                     valve =>
                         ValveOpeningRecursive(
+                            me.OpenAndMakeMoves(quickestPaths[(startingValve, valve)]),
                             graph,
                             new List<Valve>() { startingValve },
-                            valve,
                             quickestPaths,
-                            released,
-                            startingMinutes - quickestPaths[(startingValve, valve)].Count - 1
+                            released
                         )
                 )
                 .Max();
@@ -68,42 +69,42 @@ namespace Day16
         }
 
         private static int ValveOpeningRecursive(
+            TraversingEntity me,
             Graph<Valve> graph,
             List<Valve> visited,
-            Valve current,
             Dictionary<(Valve starting, Valve ending), List<Edge<Valve>>> quickestPaths,
-            int previousStepsReleased,
-            int timeLeft
+            int previousStepsReleased
         )
         {
             // If there is either no time left, all valves with any flow are visited
             // or the current node was already visited, simply return the result.
             if (
-                timeLeft < 1
+                me.OutOfTime()
                 || graph.Vertices.Where(vertex => vertex.FlowRate > 0).All(visited.Contains)
-                || visited.Contains(current)
+                || visited.Contains(me.CurrentValve)
             )
                 return previousStepsReleased;
 
-            List<Valve> newVisited = visited.Append(current).ToList();
+            List<Valve> newVisited = visited.Append(me.CurrentValve).ToList();
 
             // Valves we have yet to visit must have positive flow rate.
-            var valvesToVisit = graph.Vertices.Where(vertex => vertex.FlowRate > 0);
+            var valvesToVisit = graph.Vertices.Where(
+                vertex => vertex.FlowRate > 0 && !vertex.Equals(me.CurrentValve)
+            );
 
             // Pressure released, if we decide to open.
             // It takes one minute until it's open, hence - 1.
-            var openingRelased = current.FlowRate * (timeLeft - 1);
-            // Decide to open the valve
+            var openingRelased = me.CurrentValve.FlowRate * (me.TimeLeft - 1);
+            // Open the valve
             int[] outcomesIfOpened = valvesToVisit
                 .Select(
                     valve =>
                         ValveOpeningRecursive(
+                            me.OpenAndMakeMoves(quickestPaths[(me.CurrentValve, valve)]),
                             graph,
                             newVisited,
-                            valve,
                             quickestPaths,
-                            previousStepsReleased + openingRelased,
-                            timeLeft - quickestPaths[(current, valve)].Count - 1
+                            previousStepsReleased + openingRelased
                         )
                 )
                 .ToArray();
@@ -159,7 +160,7 @@ namespace Day16
             Thread thread = new Thread(Runner, 400_000_000);
             thread.Start();
 
-            //Runner();
+            // Runner();
         }
     }
 }
