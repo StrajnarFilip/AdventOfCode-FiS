@@ -26,44 +26,67 @@ namespace Day16
             return (valveName, rate, outNeighbours);
         }
 
+        private static int BestOutcomeClose(
+            Graph<Valve> graph,
+            TraversingEntity me,
+            Dictionary<(Valve starting, Valve ending), List<Edge<Valve>>> quickestPaths,
+            int previousStepsReleased
+        )
+        {
+            IEnumerable<Valve> valvesToVisit = graph.Vertices.Where(
+                vertex => vertex.FlowRate > 0 && !vertex.Equals(me.CurrentValve)
+            );
+
+            return valvesToVisit
+                .Select(
+                    valve =>
+                        ValveOpeningRecursive(
+                            me.MakeMoves(quickestPaths[(me.CurrentValve, valve)]),
+                            graph,
+                            new List<Valve>(),
+                            quickestPaths,
+                            previousStepsReleased
+                        )
+                )
+                .Max();
+        }
+
+        private static int BestOutcomeOpen(
+            Graph<Valve> graph,
+            TraversingEntity me,
+            Dictionary<(Valve starting, Valve ending), List<Edge<Valve>>> quickestPaths,
+            int previousStepsReleased
+        )
+        {
+            IEnumerable<Valve> valvesToVisit = graph.Vertices.Where(
+                vertex => vertex.FlowRate > 0 && !vertex.Equals(me.CurrentValve)
+            );
+            var released = me.CurrentValve.FlowRate * (startingMinutes - 1);
+
+            return valvesToVisit
+                .Select(
+                    valve =>
+                        ValveOpeningRecursive(
+                            me.OpenAndMakeMoves(quickestPaths[(me.CurrentValve, valve)]),
+                            graph,
+                            new List<Valve>() { me.CurrentValve },
+                            quickestPaths,
+                            previousStepsReleased + released
+                        )
+                )
+                .Max();
+        }
+
         private static int ValveOpenings(Graph<Valve> graph)
         {
             Dictionary<(Valve starting, Valve ending), List<Edge<Valve>>> quickestPaths =
                 graph.QuickestPaths();
 
             var startingValve = graph.Vertices.Single(valve => valve.Name == "AA");
-            IEnumerable<Valve> valvesToVisit = graph.Vertices.Where(
-                vertex => vertex.FlowRate > 0 && !vertex.Equals(startingValve)
-            );
-
-            var released = startingValve.FlowRate * (startingMinutes - 1);
             var me = new TraversingEntity("Me", startingMinutes, startingValve);
 
-            int outcomesLeftClosed = valvesToVisit
-                .Select(
-                    valve =>
-                        ValveOpeningRecursive(
-                            me.MakeMoves(quickestPaths[(startingValve, valve)]),
-                            graph,
-                            new List<Valve>() { },
-                            quickestPaths,
-                            0
-                        )
-                )
-                .Max();
-
-            int outcomesOpened = valvesToVisit
-                .Select(
-                    valve =>
-                        ValveOpeningRecursive(
-                            me.OpenAndMakeMoves(quickestPaths[(startingValve, valve)]),
-                            graph,
-                            new List<Valve>() { startingValve },
-                            quickestPaths,
-                            released
-                        )
-                )
-                .Max();
+            int outcomesLeftClosed = BestOutcomeClose(graph, me, quickestPaths, 0);
+            int outcomesOpened = BestOutcomeOpen(graph, me, quickestPaths, 0);
 
             return Math.Max(outcomesLeftClosed, outcomesOpened);
         }
