@@ -27,47 +27,13 @@ namespace Day16
             return (valveName, rate, outNeighbours);
         }
 
-        private static int BestOutcomeClose(
+        private static int BestOutcome(
             Graph<Valve> graph,
             List<Valve> visited,
             TraversingEntity me,
             Dictionary<(Valve starting, Valve ending), List<Edge<Valve>>> quickestPaths,
-            int previousStepsReleased
-        )
-        {
-            // If there is either no time left, all valves with any flow are visited
-            // or the current node was already visited, simply return the result.
-            if (
-                me.OutOfTime()
-                || graph.Vertices.Where(vertex => vertex.FlowRate > 0).All(visited.Contains)
-                || visited.Contains(me.CurrentValve)
-            )
-                return previousStepsReleased;
-
-            IEnumerable<Valve> valvesToVisit = graph.Vertices.Where(
-                vertex => vertex.FlowRate > 0 && !vertex.Equals(me.CurrentValve)
-            );
-
-            return valvesToVisit
-                .Select(
-                    valve =>
-                        BestOutcomeOpen(
-                            graph,
-                            visited,
-                            me.MakeMoves(quickestPaths[(me.CurrentValve, valve)]),
-                            quickestPaths,
-                            previousStepsReleased
-                        )
-                )
-                .Max();
-        }
-
-        private static int BestOutcomeOpen(
-            Graph<Valve> graph,
-            List<Valve> visited,
-            TraversingEntity me,
-            Dictionary<(Valve starting, Valve ending), List<Edge<Valve>>> quickestPaths,
-            int previousStepsReleased
+            int previousStepsReleased,
+            bool open = true
         )
         {
             // If there is either no time left, all valves with any flow are visited
@@ -87,12 +53,14 @@ namespace Day16
             return valvesToVisit
                 .Select(
                     valve =>
-                        BestOutcomeOpen(
+                        BestOutcome(
                             graph,
                             visited.Append(me.CurrentValve).ToList(),
-                            me.OpenAndMakeMoves(quickestPaths[(me.CurrentValve, valve)]),
+                            open
+                                ? me.OpenAndMakeMoves(quickestPaths[(me.CurrentValve, valve)])
+                                : me.MakeMoves(quickestPaths[(me.CurrentValve, valve)]),
                             quickestPaths,
-                            previousStepsReleased + released
+                            open ? previousStepsReleased + released : previousStepsReleased
                         )
                 )
                 .Max();
@@ -107,8 +75,8 @@ namespace Day16
             var me = new TraversingEntity("Me", startingMinutes, startingValve);
             var visited = new List<Valve>();
 
-            int outcomesLeftClosed = BestOutcomeClose(graph, visited, me, quickestPaths, 0);
-            int outcomesOpened = BestOutcomeOpen(graph, visited, me, quickestPaths, 0);
+            int outcomesLeftClosed = BestOutcome(graph, visited, me, quickestPaths, 0, false);
+            int outcomesOpened = BestOutcome(graph, visited, me, quickestPaths, 0);
 
             return Math.Max(outcomesLeftClosed, outcomesOpened);
         }
