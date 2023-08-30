@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 
 namespace Day18
 {
-    public sealed class DropletCube : IEquatable<DropletCube>
+    public sealed class Cube : IEquatable<Cube>
     {
         public int X { get; }
         public int Y { get; }
         public int Z { get; }
 
-        public DropletCube(int x, int y, int z)
+        public Cube(int x, int y, int z)
         {
             this.X = x;
             this.Y = y;
             this.Z = z;
         }
 
-        public DropletCube(string line)
+        public Cube(string line)
         {
             var coordinates = line.Split(',')
                 .Select(coordinate => Convert.ToInt32(coordinate))
@@ -29,30 +29,35 @@ namespace Day18
             this.Z = coordinates[2];
         }
 
-        public List<DropletCube> TheoreticalNeighbours()
+        public List<Cube> TheoreticalNeighbours()
         {
             List<(int x, int y, int z)> offsets =
                 new() { (-1, 0, 0), (1, 0, 0), (0, 0, -1), (0, 0, 1), (0, -1, 0), (0, 1, 0), };
 
             return offsets
-                .Select(offset => new DropletCube(X + offset.x, Y + offset.y, Z + offset.z))
+                .Select(offset => new Cube(X + offset.x, Y + offset.y, Z + offset.z))
                 .ToList();
         }
 
-        public int CoveredSides(IEnumerable<DropletCube> allDroplets)
+        public List<Cube> WaterFillNeighbours(IEnumerable<Cube> lavaCubes)
+        {
+            return TheoreticalNeighbours().Where(neighbour => !lavaCubes.Any(lavaCube => neighbour.Equals(lavaCube))).ToList();
+        }
+
+        public int CoveredSides(IEnumerable<Cube> lavaCubes)
         {
             return TheoreticalNeighbours()
                 .Count(
-                    droplet => allDroplets.Any(dropletFromAll => dropletFromAll.Equals(droplet))
+                    droplet => lavaCubes.Any(lavaCube => lavaCube.Equals(droplet))
                 );
         }
 
-        public int UncoveredSurface(IEnumerable<DropletCube> allDroplets)
+        public int UncoveredSurface(IEnumerable<Cube> allDroplets)
         {
             return 6 - CoveredSides(allDroplets);
         }
 
-        public bool Equals(DropletCube? other)
+        public bool Equals(Cube? other)
         {
             if (other is not null)
             {
