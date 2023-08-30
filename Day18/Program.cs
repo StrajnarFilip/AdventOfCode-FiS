@@ -1,36 +1,45 @@
-﻿namespace Day18
+﻿using System.ComponentModel;
+
+namespace Day18
 {
-    internal class Program
+    public static class Program
     {
         static int Part1(Cube[] dropletCubes)
         {
             return dropletCubes.Sum(cube => cube.UncoveredSurface(dropletCubes));
         }
 
+        static bool ContainsCube(this List<Cube> setOfCubes, Cube cubeToTest) =>
+            setOfCubes.Any(visitedCube => visitedCube.Equals(cubeToTest));
+
         static void RecursiveWaterFill(
             IEnumerable<Cube> lavaCubes,
             IEnumerable<Cube> allPossibleCubes,
             List<Cube> visited,
-            Cube currentDroplet,
+            Cube currentCube,
             ref int sidesVisible
         )
         {
             if (
-                visited.Any(visitedCube => visitedCube.Equals(currentDroplet))
-                || !allPossibleCubes.Any(possibleCube => possibleCube.Equals(currentDroplet))
-                || allPossibleCubes.All(
-                    cube => visited.Any(visitedCube => visitedCube.Equals(cube))
-                )
+                // Terminate if current cube was already visited.
+                visited.ContainsCube(currentCube)
+                // Terminate if current cube is not meant to be checked
+                // (neighbouring cube is out of bounds).
+                || !allPossibleCubes.Any(possibleCube => possibleCube.Equals(currentCube))
+                // Terminate if all possible cubes were already visited.
+                || allPossibleCubes.All(visited.ContainsCube)
             )
                 return;
 
-            sidesVisible += currentDroplet.CoveredSides(lavaCubes);
-            visited.Add(currentDroplet);
+            sidesVisible += currentCube.CoveredSides(lavaCubes);
+            visited.Add(currentCube);
 
             foreach (
-                var emptyCube in currentDroplet
+                // Recursively check neighbours that are accessible
+                // and haven't been visited already.
+                var emptyCube in currentCube
                     .WaterFillNeighbours(lavaCubes)
-                    .Where(cube => !visited.Any(visitedCube => visitedCube.Equals(cube)))
+                    .Where(cube => !visited.ContainsCube(cube))
             )
             {
                 RecursiveWaterFill(
@@ -45,6 +54,7 @@
 
         static int Part2(Cube[] lavaCubes)
         {
+            // Range that will cover all the cubes.
             int minX = lavaCubes.Min(droplet => droplet.X) - 1;
             int maxX = lavaCubes.Max(droplet => droplet.X) + 1;
             int minY = lavaCubes.Min(droplet => droplet.Y) - 1;
