@@ -41,15 +41,15 @@ namespace Day18
 
         public List<Cube> WaterFillNeighbours(IEnumerable<Cube> lavaCubes)
         {
-            return TheoreticalNeighbours().Where(neighbour => !lavaCubes.Any(lavaCube => neighbour.Equals(lavaCube))).ToList();
+            return TheoreticalNeighbours()
+                .Where(neighbour => !lavaCubes.Any(lavaCube => neighbour.Equals(lavaCube)))
+                .ToList();
         }
 
         public int CoveredSides(IEnumerable<Cube> lavaCubes)
         {
             return TheoreticalNeighbours()
-                .Count(
-                    droplet => lavaCubes.Any(lavaCube => lavaCube.Equals(droplet))
-                );
+                .Count(droplet => lavaCubes.Any(lavaCube => lavaCube.Equals(droplet)));
         }
 
         public int UncoveredSurface(IEnumerable<Cube> allDroplets)
@@ -65,6 +65,11 @@ namespace Day18
             }
 
             return this == null;
+        }
+
+        public override string ToString()
+        {
+            return $"X: {X}, Y: {Y}, Z: {Z}";
         }
     }
 }
