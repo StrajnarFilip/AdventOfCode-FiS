@@ -2,13 +2,9 @@
 {
     internal class Program
     {
-        static int Part1()
+        static int Part1(DropletCube[] dropletCubes)
         {
-            DropletCube[] cubes = File.ReadAllLines("Assets/data.txt")
-                .Select(line => new DropletCube(line))
-                .ToArray();
-
-            return cubes.Sum(cube => cube.UncoveredSurface(cubes));
+            return dropletCubes.Sum(cube => cube.UncoveredSurface(dropletCubes));
         }
 
         static int Part2()
@@ -18,7 +14,10 @@
 
         static void Main(string[] args)
         {
-            Console.WriteLine($"Part 1: {Part1()}, Part 2: {Part2()}");
+            DropletCube[] dropletCubes = File.ReadAllLines("Assets/data.txt")
+                .Select(line => new DropletCube(line))
+                .ToArray();
+            Console.WriteLine($"Part 1: {Part1(dropletCubes)}, Part 2: {Part2()}");
         }
     }
 }
